@@ -14,6 +14,13 @@ import {Text} from '../component';
 
 const Tab = createBottomTabNavigator();
 
+import StoriesOn from '../assets/images/iconSvg/StoriesOn.svg';
+import StoriesOff from '../assets/images/iconSvg/StoriesOff.svg';
+import FavoritesOn from '../assets/images/iconSvg/FavoritesOn.svg';
+import FavoritesOff from '../assets/images/iconSvg/FavoritesOff.svg';
+import StatisticsOn from '../assets/images/iconSvg/StatisticsOn.svg';
+import StatisticsOff from '../assets/images/iconSvg/StatisticsOff.svg';
+
 export default function App() {
   return (
     <Tab.Navigator
@@ -47,7 +54,7 @@ export default function App() {
               color={Colors.white}
               size={15}
               style={{
-                fontWeight: focused ? 'bold' : 'normal',
+                fontWeight: 'normal',
                 marginBottom: 20,
               }}>
               {name}
@@ -55,23 +62,17 @@ export default function App() {
           );
         },
         tabBarIcon: ({focused}) => {
-          let icon: string;
+          let Icon: React.ReactNode;
 
           if (route.name === 'Stories') {
-            icon = focused
-              ? require('../assets/images/iconSvg/StoriesOn.svg')
-              : require('../assets/images/iconSvg/StoriesOff.svg');
+            Icon = focused ? <StoriesOn /> : <StoriesOff />;
           } else if (route.name === 'Favorites') {
-            icon = focused
-              ? require('../assets/images/iconSvg/FavoritesOn.svg')
-              : require('../assets/images/iconSvg/FavoritesOff.svg');
+            Icon = focused ? <FavoritesOn /> : <FavoritesOff />;
           } else if (route.name === 'Statistics') {
-            icon = focused
-              ? require('../assets/images/iconSvg/StatisticsOn.svg')
-              : require('../assets/images/iconSvg/StatisticsOff.svg');
+            Icon = focused ? <StatisticsOn /> : <StatisticsOff />;
           }
 
-          return icon;
+          return Icon;
         },
       })}>
       <Tab.Screen name="Stories" component={Stories} />

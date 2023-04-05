@@ -279,6 +279,9 @@ const StoryDetails = ({navigation, route}) => {
 
             <TouchableOpacity
               onPress={() => {
+                console.log('====================================');
+                console.log('play clicked');
+                console.log('====================================');
                 if (isPlayed) {
                   pauseSound();
                 } else {
@@ -321,6 +324,8 @@ export default StoryDetails;
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'flex-end',
   },

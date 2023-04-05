@@ -19,7 +19,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 
-const ParentsIcon = require('../assets/images/iconSvg/Parents-Access.svg');
+import ParentsIcon from '../assets/images/iconSvg/Parents-Access.svg';
 
 import {Text} from '../component';
 import axios from 'axios';
@@ -203,8 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 44,
     backgroundColor: 'rgba(9, 39, 63, 0.21)',
     alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignSelf: 'flex-end',
     marginRight: 16,
     marginTop: 56,
