@@ -77,7 +77,6 @@ const Stories = ({navigation}) => {
             blurType="light"
             blurRadius={25}
             style={styles.parents}>
-            <ParentsIcon />
             <Text
               AlmaraiRegular
               color={Colors.white}
@@ -85,6 +84,7 @@ const Stories = ({navigation}) => {
               style={{textAlign: 'center'}}>
               الوالدين
             </Text>
+            <ParentsIcon />
           </BlurView>
         </TouchableOpacity>
       </ImageBackground>
@@ -200,14 +200,15 @@ const styles = StyleSheet.create({
   parents: {
     width: 107,
     height: 48,
+    display: 'flex',
+    flexDirection: 'row',
     borderRadius: 44,
     backgroundColor: 'rgba(9, 39, 63, 0.21)',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    alignSelf: 'flex-end',
-    marginRight: 16,
+    alignSelf: 'flex-start',
+    marginLeft: 16,
     marginTop: 56,
-    flexDirection: 'row',
     overflow: 'hidden',
   },
   world: {

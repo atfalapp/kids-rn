@@ -94,20 +94,25 @@ const Statistics = ({navigation}) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           style={{marginLeft: '5%', marginTop: goalsMargin}}>
-          <View>
-            <Text
-              GulfText
-              color={Colors.paua}
-              style={styles.target}
-              size={goalTextSize}>
-              ✦ رفع مستوى التركيز للطفل.
-            </Text>
+          <View
+            style={{
+              width: '100%',
+              // justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
               style={{marginHorizontal: '22%'}}>
               ✦ إغناء الثروة اللغوية للطفل.
+            </Text>
+            <Text
+              GulfText
+              color={Colors.paua}
+              style={styles.target}
+              size={goalTextSize}>
+              ✦ رفع مستوى التركيز للطفل.
             </Text>
           </View>
           <View style={{marginRight: 300}}>
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
   },
   goalsView: {
     alignItems: 'center',
-    bottom: smallScreen ? '12%' : '5%',
+    bottom: smallScreen ? '25%' : '15%',
   },
   goal: {
     flexWrap: 'wrap',

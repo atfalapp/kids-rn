@@ -74,13 +74,14 @@ const StoryDetails = ({navigation, route}) => {
         //   index == 1? url + "/audios/forests_flower/forests_flower.mp3":
       },
       {
+        shouldPlay: true,
         isMuted: false,
         rate: 1.0,
       },
     );
 
     setSound(sound);
-    console.log('aaaaaaa', sound);
+    setIsPlayed(true);
   }
 
   const shareStory = async () => {
@@ -278,6 +279,10 @@ const StoryDetails = ({navigation, route}) => {
             </TouchableOpacity>
 
             <TouchableOpacity
+              style={{
+                width: 76,
+                height: 76,
+              }}
               onPress={() => {
                 console.log('====================================');
                 console.log('play clicked');
