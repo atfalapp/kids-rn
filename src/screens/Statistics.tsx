@@ -28,7 +28,7 @@ const Statistics = ({navigation}) => {
   const goalsHeadingTextSize = 35;
   const goalTextSize = smallScreen ? 12 : 15;
   const goalsMargin = smallScreen ? -25 : -10;
-  const shapeSize = smallScreen ? 130 : 130;
+  const shapeSize = smallScreen ? 140 : 140;
 
   return (
     <LinearGradient
@@ -56,7 +56,7 @@ const Statistics = ({navigation}) => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{marginHorizontal: 35}}>
+          style={{marginHorizontal: 25}}>
           <StatisticsSquare
             storiesNum={2}
             squareSize={shapeSize}
@@ -82,7 +82,8 @@ const Statistics = ({navigation}) => {
         </ScrollView>
       </View>
 
-      <View style={styles.goalsView}>
+      <View
+        style={{...styles.goalsView, display: 'flex', flexDirection: 'column'}}>
         <Text
           VibesRegular
           color={Colors.paua}
@@ -93,7 +94,11 @@ const Statistics = ({navigation}) => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{marginLeft: '5%', marginTop: goalsMargin}}>
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: goalsMargin,
+          }}>
           <View
             style={{
               width: '100%',
@@ -103,16 +108,16 @@ const Statistics = ({navigation}) => {
             <Text
               GulfText
               color={Colors.paua}
-              size={goalTextSize}
-              style={{marginHorizontal: '22%'}}>
-              ✦ إغناء الثروة اللغوية للطفل.
+              style={styles.target}
+              size={goalTextSize}>
+              ✦ رفع مستوى التركيز للطفل.
             </Text>
             <Text
               GulfText
               color={Colors.paua}
-              style={styles.target}
-              size={goalTextSize}>
-              ✦ رفع مستوى التركيز للطفل.
+              size={goalTextSize}
+              style={{marginLeft: '50%'}}>
+              ✦ إغناء الثروة اللغوية للطفل.
             </Text>
           </View>
           <View style={{marginRight: 300}}>
@@ -120,14 +125,14 @@ const Statistics = ({navigation}) => {
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: '-120%'}}>
+              style={{width: 220, marginLeft: '-75%', textAlign: 'right'}}>
               ✦ المساهمة بتطوير خيال الطفل.
             </Text>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: -90}}>
+              style={{marginLeft: -60}}>
               {
                 '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
               }
@@ -209,10 +214,10 @@ const styles = StyleSheet.create({
   },
   targetTitle: {
     marginTop: '10%',
-    marginBottom: '5%',
+    marginBottom: '2%',
   },
   target: {
-    marginRight: '20%',
+    marginLeft: '35%',
     display: 'flex',
     flexDirection: 'column',
   },

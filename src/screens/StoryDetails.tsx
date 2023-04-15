@@ -194,8 +194,8 @@ const StoryDetails = ({navigation, route}) => {
         <View style={styles.headerLogs}>
           <TouchableOpacity
             onPress={() => {
-              soundState.unloadAsync();
-              soundState.stopAsync();
+              soundState?.unloadAsync();
+              soundState?.stopAsync();
               navigation.goBack();
             }}>
             <CircularIcon

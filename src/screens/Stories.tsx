@@ -81,29 +81,30 @@ const Stories = ({navigation}) => {
             paddingRight: 20,
           }}>
           <TouchableOpacity
+            style={{
+              width: 107,
+              height: 48,
+              backgroundColor: 'rgba(9, 39, 63, 0.60)',
+              borderRadius: 44,
+              marginTop: 25,
+            }}
             onPress={() => navigation.navigate('ParentsAccess')}>
-            <BlurView
-              blurAmount={20}
-              blurType="light"
-              blurRadius={25}
-              style={styles.parents}>
-              <View
-                style={{
-                  height: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                }}>
-                <ParentsIcon />
-                <Text
-                  AlmaraiRegular
-                  color={Colors.white}
-                  size={16}
-                  style={{textAlign: 'center'}}>
-                  الوالدين
-                </Text>
-              </View>
-            </BlurView>
+            <View
+              style={{
+                height: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}>
+              <ParentsIcon />
+              <Text
+                AlmaraiRegular
+                color={Colors.white}
+                size={16}
+                style={{textAlign: 'center'}}>
+                الوالدين
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
       </ImageBackground>

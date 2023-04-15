@@ -38,7 +38,6 @@ const StatisticsSquare = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-end',
         bottom: 120,
         marginLeft: 20,
       }}>
@@ -46,14 +45,14 @@ const StatisticsSquare = ({
         GulfBold
         size={12}
         color={Colors.white}
-        style={{width: 100, textAlign: 'right', marginRight: 25}}>
+        style={{width: 100, textAlign: 'left', marginRight: 25}}>
         عدد القصص المسموعة لليوم
       </Text>
       <Text
         SFProRoundedSemiBold
         size={20}
         color={'#afd895'}
-        style={{textAlign: 'right', marginRight: 25}}>
+        style={{textAlign: 'right', marginRight: 120}}>
         {storiesNum}
       </Text>
       <View style={{width: '80%', alignItems: 'flex-start', marginTop: -10}}>
