@@ -74,14 +74,13 @@ const StoryDetails = ({navigation, route}) => {
         //   index == 1? url + "/audios/forests_flower/forests_flower.mp3":
       },
       {
-        shouldPlay: true,
+        shouldPlay: false,
         isMuted: false,
         rate: 1.0,
       },
     );
 
     setSound(sound);
-    setIsPlayed(true);
   }
 
   const shareStory = async () => {
@@ -138,8 +137,8 @@ const StoryDetails = ({navigation, route}) => {
     return soundState
       ? () => {
           console.log('Unloading Sound');
-          // sound.unloadAsync();
-          // sound.stopAsync();
+          soundState.unloadAsync();
+          soundState.stopAsync();
         }
       : undefined;
   }, [soundState]);
@@ -193,7 +192,12 @@ const StoryDetails = ({navigation, route}) => {
       style={styles.screenContainer}>
       <View style={styles.screenHeader}>
         <View style={styles.headerLogs}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => {
+              soundState.unloadAsync();
+              soundState.stopAsync();
+              navigation.goBack();
+            }}>
             <CircularIcon
               Icon={MinimizeIcon}
               circleSize={50}

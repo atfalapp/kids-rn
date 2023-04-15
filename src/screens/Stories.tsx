@@ -71,22 +71,41 @@ const Stories = ({navigation}) => {
         resizeMode="stretch"
         style={styles.screenHeader}
         source={require('../assets/images/Hero.png')}>
-        <TouchableOpacity onPress={() => navigation.navigate('ParentsAccess')}>
-          <BlurView
-            blurAmount={20}
-            blurType="light"
-            blurRadius={25}
-            style={styles.parents}>
-            <Text
-              AlmaraiRegular
-              color={Colors.white}
-              size={16}
-              style={{textAlign: 'center'}}>
-              الوالدين
-            </Text>
-            <ParentsIcon />
-          </BlurView>
-        </TouchableOpacity>
+        <View
+          style={{
+            display: 'flex',
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginTop: 30,
+            paddingRight: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ParentsAccess')}>
+            <BlurView
+              blurAmount={20}
+              blurType="light"
+              blurRadius={25}
+              style={styles.parents}>
+              <View
+                style={{
+                  height: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center',
+                }}>
+                <ParentsIcon />
+                <Text
+                  AlmaraiRegular
+                  color={Colors.white}
+                  size={16}
+                  style={{textAlign: 'center'}}>
+                  الوالدين
+                </Text>
+              </View>
+            </BlurView>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <LinearGradient
@@ -200,16 +219,8 @@ const styles = StyleSheet.create({
   parents: {
     width: 107,
     height: 48,
-    display: 'flex',
-    flexDirection: 'row',
     borderRadius: 44,
     backgroundColor: 'rgba(9, 39, 63, 0.21)',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    alignSelf: 'flex-start',
-    marginLeft: 16,
-    marginTop: 56,
-    overflow: 'hidden',
   },
   world: {
     textAlign: 'center',
@@ -217,7 +228,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   albumContainer: {
-    height: 200,
+    height: hp(30),
     width: 175,
     backgroundColor: Colors.white,
     borderRadius: 25,
@@ -271,8 +282,8 @@ const styles = StyleSheet.create({
     bottom: 3,
     marginTop: 5,
     marginHorizontal: 3,
-    width: 165,
-    height: 150,
+    width: wp(42),
+    height: hp(23),
     shadowColor: 'rgba(255, 255, 255, 0.53)',
     shadowOffset: {
       width: 1,
