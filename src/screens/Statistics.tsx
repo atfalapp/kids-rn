@@ -115,7 +115,7 @@ const Statistics = ({navigation}) => {
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: '-55%'}}>
+              style={{marginLeft: '-45%'}}>
               ✦ إغناء الثروة اللغوية للطفل.
             </Text>
           </View>
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     marginBottom: '2%',
   },
   target: {
-    marginLeft: '-60%',
+    marginLeft: '-65%',
     display: 'flex',
     flexDirection: 'column',
   },
