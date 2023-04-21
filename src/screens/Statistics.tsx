@@ -27,7 +27,7 @@ const Statistics = ({navigation}) => {
 
   const goalsHeadingTextSize = 35;
   const goalTextSize = smallScreen ? 12 : 15;
-  const goalsMargin = smallScreen ? -25 : -10;
+  const goalsMargin = smallScreen ? -25 : -25;
   const shapeSize = smallScreen ? 140 : 140;
 
   return (
@@ -126,7 +126,7 @@ const Statistics = ({navigation}) => {
               size={goalTextSize}
               style={{
                 width: 220,
-                marginLeft: '-210%',
+                marginLeft: '-175%',
                 textAlign: 'right',
               }}>
               ✦ المساهمة بتطوير خيال الطفل.
@@ -138,6 +138,7 @@ const Statistics = ({navigation}) => {
               style={{
                 width: 450,
                 marginLeft: -290,
+                marginRight: 70,
               }}>
               {
                 '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
