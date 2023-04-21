@@ -7,7 +7,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 import {Text, CircularIcon, StatisticsSquare} from '../component';
-
+import InvertibleScrollView from 'react-native-invertible-scroll-view';
 const smallScreen = Dimensions.get('window').height <= 700;
 
 const Statistics = ({navigation}) => {
@@ -82,8 +82,7 @@ const Statistics = ({navigation}) => {
         </ScrollView>
       </View>
 
-      <View
-        style={{...styles.goalsView, display: 'flex', flexDirection: 'column'}}>
+      <View style={{...styles.goalsView}}>
         <Text
           VibesRegular
           color={Colors.paua}
@@ -116,23 +115,30 @@ const Statistics = ({navigation}) => {
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: '50%'}}>
+              style={{marginLeft: '-55%'}}>
               ✦ إغناء الثروة اللغوية للطفل.
             </Text>
           </View>
-          <View style={{marginRight: 300}}>
+          <View>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{width: 220, marginLeft: '-75%', textAlign: 'right'}}>
+              style={{
+                width: 220,
+                marginLeft: '-210%',
+                textAlign: 'right',
+              }}>
               ✦ المساهمة بتطوير خيال الطفل.
             </Text>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: -60}}>
+              style={{
+                width: 450,
+                marginLeft: -290,
+              }}>
               {
                 '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
               }
@@ -217,7 +223,7 @@ const styles = StyleSheet.create({
     marginBottom: '2%',
   },
   target: {
-    marginLeft: '35%',
+    marginLeft: '-60%',
     display: 'flex',
     flexDirection: 'column',
   },

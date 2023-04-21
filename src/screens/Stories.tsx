@@ -149,7 +149,7 @@ const Stories = ({navigation}) => {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            style={styles.categoryTypesView}>
+            style={{marginTop: 15}}>
             {albums.map((album, index) => (
               <TouchableOpacity
                 key={album.id}
@@ -229,8 +229,8 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   albumContainer: {
-    height: hp(30),
-    width: 175,
+    height: 215,
+    width: 190,
     backgroundColor: Colors.white,
     borderRadius: 25,
     flexDirection: 'column',
@@ -283,8 +283,8 @@ const styles = StyleSheet.create({
     bottom: 3,
     marginTop: 5,
     marginHorizontal: 3,
-    width: wp(42),
-    height: hp(23),
+    width: 182,
+    height: 170,
     shadowColor: 'rgba(255, 255, 255, 0.53)',
     shadowOffset: {
       width: 1,
