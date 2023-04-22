@@ -7,7 +7,6 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 import {Text, CircularIcon, StatisticsSquare} from '../component';
-import InvertibleScrollView from 'react-native-invertible-scroll-view';
 const smallScreen = Dimensions.get('window').height <= 700;
 
 const Statistics = ({navigation}) => {
@@ -177,15 +176,16 @@ const styles = StyleSheet.create({
   },
   statisticsTitle: {
     textAlign: 'center',
-    marginVertical: '8%',
+    marginTop: '4%',
+    marginBottom: '8%',
   },
   statisticsSubTitle: {
     textAlign: 'center',
     marginHorizontal: '10%',
     letterSpacing: 1,
     lineHeight: 25,
-    marginTop: '-8%',
-    marginBottom: '3%',
+    marginTop: '-9%',
+    marginBottom: '2%',
   },
   statisticsShape: {
     marginHorizontal: 10,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   goalsView: {
     alignItems: 'center',
-    bottom: smallScreen ? '25%' : '15%',
+    bottom: smallScreen ? '25%' : '20%',
   },
   goal: {
     flexWrap: 'wrap',
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   targetTitle: {
-    marginTop: '10%',
+    marginTop: '12%',
     marginBottom: '2%',
   },
   target: {
