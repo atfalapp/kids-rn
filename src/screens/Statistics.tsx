@@ -7,7 +7,6 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 import {Text, CircularIcon, StatisticsSquare} from '../component';
-
 const smallScreen = Dimensions.get('window').height <= 700;
 
 const Statistics = ({navigation}) => {
@@ -27,8 +26,8 @@ const Statistics = ({navigation}) => {
 
   const goalsHeadingTextSize = 35;
   const goalTextSize = smallScreen ? 12 : 15;
-  const goalsMargin = smallScreen ? -25 : -10;
-  const shapeSize = smallScreen ? 130 : 130;
+  const goalsMargin = smallScreen ? -25 : -25;
+  const shapeSize = smallScreen ? 140 : 140;
 
   return (
     <LinearGradient
@@ -56,7 +55,7 @@ const Statistics = ({navigation}) => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{marginHorizontal: 35}}>
+          style={{marginHorizontal: 25}}>
           <StatisticsSquare
             storiesNum={2}
             squareSize={shapeSize}
@@ -82,7 +81,7 @@ const Statistics = ({navigation}) => {
         </ScrollView>
       </View>
 
-      <View style={styles.goalsView}>
+      <View style={{...styles.goalsView}}>
         <Text
           VibesRegular
           color={Colors.paua}
@@ -93,8 +92,17 @@ const Statistics = ({navigation}) => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          style={{marginLeft: '5%', marginTop: goalsMargin}}>
-          <View>
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: goalsMargin,
+          }}>
+          <View
+            style={{
+              width: '100%',
+              // justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <Text
               GulfText
               color={Colors.paua}
@@ -106,23 +114,31 @@ const Statistics = ({navigation}) => {
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginHorizontal: '22%'}}>
+              style={{marginLeft: '-45%'}}>
               ✦ إغناء الثروة اللغوية للطفل.
             </Text>
           </View>
-          <View style={{marginRight: 300}}>
+          <View>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: '-120%'}}>
+              style={{
+                width: 220,
+                marginLeft: '-175%',
+                textAlign: 'right',
+              }}>
               ✦ المساهمة بتطوير خيال الطفل.
             </Text>
             <Text
               GulfText
               color={Colors.paua}
               size={goalTextSize}
-              style={{marginLeft: -90}}>
+              style={{
+                width: 450,
+                marginLeft: -290,
+                marginRight: 70,
+              }}>
               {
                 '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
               }
@@ -160,15 +176,16 @@ const styles = StyleSheet.create({
   },
   statisticsTitle: {
     textAlign: 'center',
-    marginVertical: '8%',
+    marginTop: '4%',
+    marginBottom: '8%',
   },
   statisticsSubTitle: {
     textAlign: 'center',
     marginHorizontal: '10%',
     letterSpacing: 1,
     lineHeight: 25,
-    marginTop: '-8%',
-    marginBottom: '3%',
+    marginTop: '-9%',
+    marginBottom: '2%',
   },
   statisticsShape: {
     marginHorizontal: 10,
@@ -176,7 +193,7 @@ const styles = StyleSheet.create({
   },
   goalsView: {
     alignItems: 'center',
-    bottom: smallScreen ? '12%' : '5%',
+    bottom: smallScreen ? '25%' : '20%',
   },
   goal: {
     flexWrap: 'wrap',
@@ -203,11 +220,11 @@ const styles = StyleSheet.create({
     height: 150,
   },
   targetTitle: {
-    marginTop: '10%',
-    marginBottom: '5%',
+    marginTop: '12%',
+    marginBottom: '2%',
   },
   target: {
-    marginRight: '20%',
+    marginLeft: '-65%',
     display: 'flex',
     flexDirection: 'column',
   },

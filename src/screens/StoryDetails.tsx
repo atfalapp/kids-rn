@@ -74,13 +74,13 @@ const StoryDetails = ({navigation, route}) => {
         //   index == 1? url + "/audios/forests_flower/forests_flower.mp3":
       },
       {
+        shouldPlay: false,
         isMuted: false,
         rate: 1.0,
       },
     );
 
     setSound(sound);
-    console.log('aaaaaaa', sound);
   }
 
   const shareStory = async () => {
@@ -137,8 +137,8 @@ const StoryDetails = ({navigation, route}) => {
     return soundState
       ? () => {
           console.log('Unloading Sound');
-          // sound.unloadAsync();
-          // sound.stopAsync();
+          soundState.unloadAsync();
+          soundState.stopAsync();
         }
       : undefined;
   }, [soundState]);
@@ -192,7 +192,12 @@ const StoryDetails = ({navigation, route}) => {
       style={styles.screenContainer}>
       <View style={styles.screenHeader}>
         <View style={styles.headerLogs}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => {
+              soundState?.unloadAsync();
+              soundState?.stopAsync();
+              navigation.goBack();
+            }}>
             <CircularIcon
               Icon={MinimizeIcon}
               circleSize={50}
@@ -278,7 +283,14 @@ const StoryDetails = ({navigation, route}) => {
             </TouchableOpacity>
 
             <TouchableOpacity
+              style={{
+                width: 76,
+                height: 76,
+              }}
               onPress={() => {
+                console.log('====================================');
+                console.log('play clicked');
+                console.log('====================================');
                 if (isPlayed) {
                   pauseSound();
                 } else {
@@ -321,6 +333,8 @@ export default StoryDetails;
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'flex-end',
   },

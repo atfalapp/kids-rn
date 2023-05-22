@@ -19,7 +19,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 
-const ParentsIcon = require('../assets/images/iconSvg/Parents-Access.svg');
+import ParentsIcon from '../assets/images/iconSvg/Parents-Access.svg';
 
 import {Text} from '../component';
 import axios from 'axios';
@@ -71,22 +71,42 @@ const Stories = ({navigation}) => {
         resizeMode="stretch"
         style={styles.screenHeader}
         source={require('../assets/images/Hero.png')}>
-        <TouchableOpacity onPress={() => navigation.navigate('ParentsAccess')}>
-          <BlurView
-            blurAmount={20}
-            blurType="light"
-            blurRadius={25}
-            style={styles.parents}>
-            <ParentsIcon />
-            <Text
-              AlmaraiRegular
-              color={Colors.white}
-              size={16}
-              style={{textAlign: 'center'}}>
-              الوالدين
-            </Text>
-          </BlurView>
-        </TouchableOpacity>
+        <View
+          style={{
+            display: 'flex',
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginTop: 30,
+            paddingRight: 20,
+          }}>
+          <TouchableOpacity
+            style={{
+              width: 107,
+              height: 48,
+              backgroundColor: 'rgba(9, 39, 63, 0.60)',
+              borderRadius: 44,
+              marginTop: 25,
+            }}
+            onPress={() => navigation.navigate('ParentsAccess')}>
+            <View
+              style={{
+                height: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}>
+              <ParentsIcon />
+              <Text
+                AlmaraiRegular
+                color={Colors.white}
+                size={16}
+                style={{textAlign: 'center'}}>
+                الوالدين
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <LinearGradient
@@ -129,7 +149,7 @@ const Stories = ({navigation}) => {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            style={styles.categoryTypesView}>
+            style={{marginTop: 15}}>
             {albums.map((album, index) => (
               <TouchableOpacity
                 key={album.id}
@@ -202,14 +222,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 44,
     backgroundColor: 'rgba(9, 39, 63, 0.21)',
-    alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignSelf: 'flex-end',
-    marginRight: 16,
-    marginTop: 56,
-    flexDirection: 'row',
-    overflow: 'hidden',
   },
   world: {
     textAlign: 'center',
@@ -217,8 +229,8 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   albumContainer: {
-    height: 200,
-    width: 175,
+    height: 215,
+    width: 190,
     backgroundColor: Colors.white,
     borderRadius: 25,
     flexDirection: 'column',
@@ -271,8 +283,8 @@ const styles = StyleSheet.create({
     bottom: 3,
     marginTop: 5,
     marginHorizontal: 3,
-    width: 165,
-    height: 150,
+    width: 182,
+    height: 170,
     shadowColor: 'rgba(255, 255, 255, 0.53)',
     shadowOffset: {
       width: 1,
