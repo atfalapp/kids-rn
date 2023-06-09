@@ -16,7 +16,7 @@ import {
   convertMillisToDuration,
   convertDurationToMillis,
 } from '../services/utilities';
-import {useDispatch, useSelector} from 'react-redux';
+// import {useDispatch, useSelector} from 'react-redux';
 
 // Assets
 // Utils
@@ -35,19 +35,20 @@ import {
 } from '../assets/images/iconSvg/index.js';
 import {url} from '../services/config';
 import {Audio} from 'expo-av';
-
+import {useStores} from '../store/rootStore';
 function renderThumb() {
   return <Thumb />;
 }
 
 const StoryDetails = ({navigation, route}) => {
-  const dispatch = useDispatch();
-  const {isPlaying, currentPlayed} = useSelector(({app}) => ({
-    isPlaying: app.isPlaying,
-    currentPlayed: app.currentPlayed,
-  }));
+  const store = useStores();
+  // const dispatch = useDispatch();
+  // const {isPlaying, currentPlayed} = useSelector(({app}) => ({
+  //   isPlaying: app.isPlaying,
+  //   currentPlayed: app.currentPlayed,
+  // }));
 
-  console.log('isPlaying', isPlaying);
+  console.log('isPlaying', store.audioStore.isPlaying);
 
   // console.log(url);
   const {item, fav} = route?.params;
@@ -108,9 +109,10 @@ const StoryDetails = ({navigation, route}) => {
     await soundState.setStatusAsync({positionMillis: 0});
     setIsPlayed(false);
     await soundState.pauseAsync();
-    dispatch({
-      type: 'PAUSED_SOUND',
-    });
+    store.audioStore.updateIsPlaying(false);
+    // dispatch({
+    //   type: 'PAUSED_SOUND',
+    // });
     setCurrentPosition(0);
   }
 
@@ -139,34 +141,39 @@ const StoryDetails = ({navigation, route}) => {
           console.log('Unloading Sound');
           soundState.unloadAsync();
           soundState.stopAsync();
+          store.audioStore.updateIsPlaying(false);
+          store.audioStore.updateCurrentlyPlayed(undefined);
         }
       : undefined;
   }, [soundState]);
 
   async function playSound() {
-    if (isPlaying && currentPlayed) {
+    if (store.audioStore.isPlaying && store.audioStore.currentPlayed) {
       console.log('unloaddddd');
-      currentPlayed.unloadAsync();
-      currentPlayed.stopAsync();
+      store.audioStore.currentPlayed.unloadAsync();
+      store.audioStore.currentPlayed.stopAsync();
       // setSound(undefined)
     } else {
       await soundState.playAsync();
       setIsPlayed(true);
-      dispatch({
-        type: 'PLAYING_SOUND',
-        payload: {
-          sound: soundState,
-        },
-      });
+      store.audioStore.updateIsPlaying(true);
+      store.audioStore.updateCurrentlyPlayed(soundState);
+      // dispatch({
+      //   type: 'PLAYING_SOUND',
+      //   payload: {
+      //     sound: soundState,
+      //   },
+      // });
     }
   }
 
   async function pauseSound() {
     await soundState.pauseAsync();
     setIsPlayed(false);
-    dispatch({
-      type: 'PAUSED_SOUND',
-    });
+    store.audioStore.updateIsPlaying(false);
+    // dispatch({
+    //   type: 'PAUSED_SOUND',
+    // });
   }
 
   async function moveForward() {
@@ -291,7 +298,7 @@ const StoryDetails = ({navigation, route}) => {
                 console.log('====================================');
                 console.log('play clicked');
                 console.log('====================================');
-                if (isPlayed) {
+                if (store.audioStore.isPlayed) {
                   pauseSound();
                 } else {
                   playSound();

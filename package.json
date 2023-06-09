@@ -27,6 +27,8 @@
     "expo-status-bar": "^1.4.4",
     "expo-updates": "^0.16.3",
     "install-expo-modules": "^0.5.1",
+    "mobx": "^6.9.0",
+    "mobx-react": "^7.6.0",
     "moment-timezone": "^0.5.41",
     "narabicwords": "^0.0.27",
     "prop-types": "^15.8.1",
