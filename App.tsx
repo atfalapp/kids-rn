@@ -11,15 +11,18 @@ import {
   StatusBar,
   SafeAreaView,
 } from 'react-native';
-import {Provider} from 'react-redux';
-import configureStore from './src/store/configureStore';
+// import {Provider} from 'react-redux';
+// import configureStore from './src/store/configureStore';
 import AppNavigator from './src/navigations';
 // import {StripeProvider} from '@stripe/stripe-react-native';
 import useFonts from './hooks/useFonts';
 import * as Updates from 'expo-updates';
 import * as SplashScreen from 'expo-splash-screen';
 import BLUE_BIRD from './src/assets/blue-bird-bg.png';
-let store = configureStore();
+// let store = configureStore();
+
+import RootStore from './src/store/rootStore';
+import {Provider} from 'mobx-react';
 
 export default function App() {
   const [IsReady, SetIsReady] = useState(false);
@@ -94,7 +97,7 @@ export default function App() {
         // barStyle="light-content"
         backgroundColor="transparent"
       />
-      <Provider store={store}>
+      <Provider store={RootStore}>
         <AppNavigator />
       </Provider>
     </SafeAreaView>
