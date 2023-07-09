@@ -9,8 +9,8 @@ export const convertMillisToDuration = (millis: any) => {
 
 export const convertDurationToMillis = (duration: any) => {
   return (
-    parseInt(duration.split(':')[0], 10) * 60000 +
-    parseInt(duration.split(':')[1], 10) * 1000
+    parseInt(duration?.split(':')[0], 10) * 60000 +
+    parseInt(duration?.split(':')[1], 10) * 1000
   );
 };
 

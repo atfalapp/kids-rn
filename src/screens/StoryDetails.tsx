@@ -80,8 +80,10 @@ const StoryDetails = ({navigation, route}) => {
         rate: 1.0,
       },
     );
-
-    setSound(sound);
+    store.audioStore.updateCurrentlyPlayed(sound);
+    store.audioStore.updateDuration(convertDurationToMillis(item?.time));
+    store.audioStore.updateCurrentPosition(0);
+    // setSound(sound);
   }
 
   const shareStory = async () => {
@@ -106,56 +108,65 @@ const StoryDetails = ({navigation, route}) => {
   };
 
   async function killSound() {
-    await soundState.setStatusAsync({positionMillis: 0});
-    setIsPlayed(false);
-    await soundState.pauseAsync();
+    // await soundState.setStatusAsync({positionMillis: 0});
+    await store.audioStore.soundState.setStatusAsync({positionMillis: 0});
+    // setIsPlayed(false);
     store.audioStore.updateIsPlaying(false);
+    // await soundState.pauseAsync();
+    await store.audioStore.soundState.pauseAsync();
     // dispatch({
     //   type: 'PAUSED_SOUND',
     // });
-    setCurrentPosition(0);
+    // setCurrentPosition(0);
+    store.audioStore.updateCurrentPosition(0);
   }
 
   useEffect(() => {
-    if (!soundState || (soundState && !soundState._loaded)) {
+    if (
+      !store.audioStore.soundState ||
+      (store.audioStore.soundState && !store.audioStore.soundState._loaded)
+    ) {
       loadSound();
     }
-  }, [soundState]);
+  }, [store.audioStore.soundState]);
 
   useEffect(() => {
-    if (soundState) {
-      soundState.setOnPlaybackStatusUpdate(({positionMillis}) => {
-        console.log(positionMillis, duration);
-        // 362266 362000
-        if (positionMillis >= duration) {
-          console.log('Sound Killed');
-          killSound();
-        } else {
-          // console.log("Current Position", currentPosition, "positionMillis", positionMillis, "isPlayed", isPlayed);
-          setCurrentPosition(positionMillis);
-        }
-      });
+    if (store.audioStore.soundState) {
+      store.audioStore.soundState.setOnPlaybackStatusUpdate(
+        ({positionMillis}) => {
+          console.log(positionMillis, store.audioStore.duration);
+          // 362266 362000
+          if (positionMillis >= store.audioStore.duration) {
+            console.log('Sound Killed');
+            killSound();
+          } else {
+            // console.log("Current Position", currentPosition, "positionMillis", positionMillis, "isPlayed", isPlayed);
+            // setCurrentPosition(positionMillis);
+            store.audioStore.updateCurrentPosition(positionMillis);
+          }
+        },
+      );
     }
-    return soundState
+    return store.audioStore.soundState
       ? () => {
           console.log('Unloading Sound');
-          soundState.unloadAsync();
-          soundState.stopAsync();
+          store.audioStore.soundState.unloadAsync();
+          store.audioStore.soundState.stopAsync();
           store.audioStore.updateIsPlaying(false);
           store.audioStore.updateCurrentlyPlayed(undefined);
         }
       : undefined;
-  }, [soundState]);
+  }, [store.audioStore.soundState]);
 
   async function playSound() {
-    if (store.audioStore.isPlaying && store.audioStore.currentPlayed) {
+    if (store.audioStore.isPlayed && store.audioStore.currentPlayed) {
       console.log('unloaddddd');
       store.audioStore.currentPlayed.unloadAsync();
       store.audioStore.currentPlayed.stopAsync();
       // setSound(undefined)
     } else {
-      await soundState.playAsync();
-      setIsPlayed(true);
+      await store.audioStore.soundState.playAsync();
+      // setIsPlayed(true);
       store.audioStore.updateIsPlaying(true);
       store.audioStore.updateCurrentlyPlayed(soundState);
       // dispatch({
@@ -168,9 +179,9 @@ const StoryDetails = ({navigation, route}) => {
   }
 
   async function pauseSound() {
-    await soundState.pauseAsync();
-    setIsPlayed(false);
+    await store.audioStore.soundState.pauseAsync();
     store.audioStore.updateIsPlaying(false);
+    // store.audioStore.updateIsPlaying(false);
     // dispatch({
     //   type: 'PAUSED_SOUND',
     // });
@@ -178,7 +189,9 @@ const StoryDetails = ({navigation, route}) => {
 
   async function moveForward() {
     let forpos =
-      currentPosition + 15000 <= duration ? currentPosition + 15000 : duration;
+      store.audioStore.currentPosition + 15000 <= store.audioStore.duration
+        ? store.audioStore.currentPosition + 15000
+        : store.audioStore.duration;
     await onChange(forpos);
   }
 
@@ -189,8 +202,8 @@ const StoryDetails = ({navigation, route}) => {
   }
 
   async function onChange(value) {
-    setCurrentPosition(value);
-    await soundState.setStatusAsync({positionMillis: value});
+    store.audioStore.updateCurrentPosition(value);
+    await store.audioStore.soundState.setStatusAsync({positionMillis: value});
   }
 
   return (
@@ -201,8 +214,8 @@ const StoryDetails = ({navigation, route}) => {
         <View style={styles.headerLogs}>
           <TouchableOpacity
             onPress={() => {
-              soundState?.unloadAsync();
-              soundState?.stopAsync();
+              store.audioStore.soundState?.unloadAsync();
+              store.audioStore.soundState?.stopAsync();
               navigation.goBack();
             }}>
             <CircularIcon
@@ -251,8 +264,8 @@ const StoryDetails = ({navigation, route}) => {
         <View style={styles.player}>
           <Slider
             minimumValue={0}
-            maximumValue={duration}
-            value={currentPosition}
+            maximumValue={store.audioStore.duration}
+            value={store.audioStore.currentPosition}
             onValueChange={value => onChange(value[0])}
             trackStyle={{
               borderRadius: 5,
@@ -273,14 +286,14 @@ const StoryDetails = ({navigation, route}) => {
               color={Colors.sliderTrackTint}
               size={17}
               style={styles.playerPeriodText}>
-              {convertMillisToDuration(currentPosition)}
+              {convertMillisToDuration(store.audioStore.currentPosition)}
             </Text>
             <Text
               SFProRoundedMedium
               color={Colors.white}
               size={17}
               style={styles.playerPeriodText}>
-              {convertMillisToDuration(duration)}
+              {convertMillisToDuration(store.audioStore.duration)}
             </Text>
           </View>
 
@@ -304,7 +317,7 @@ const StoryDetails = ({navigation, route}) => {
                   playSound();
                 }
               }}>
-              {isPlayed ? <PauseWithCircle /> : <PlayerPlay />}
+              {store.audioStore.isPlayed ? <PauseWithCircle /> : <PlayerPlay />}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={moveForward}>

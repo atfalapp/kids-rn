@@ -4,7 +4,7 @@ import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import * as Colors from '../styles/Colors';
-import {Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 
 import Favorites from './Favorites';
 import Statistics from './Statistics';
