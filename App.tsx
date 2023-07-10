@@ -43,13 +43,10 @@ export default function App() {
       I18nManager.forceRTL(true);
       reloadApp();
     }
-
-    // StatusBar.setHidden(true)
-    //       StatusBar.setBarStyle("dark-content");
-    // if (Platform.OS === "android") {
-    //   StatusBar.setBackgroundColor("transparent");
-    //   StatusBar.setTranslucent(true);
-    // }
+    async function setupPlayerOnStart() {
+      await TrackPlayer.setupPlayer();
+    }
+    setupPlayerOnStart();
   }, []);
 
   useEffect(() => {

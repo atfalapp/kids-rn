@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Slider} from '@miblanchard/react-native-slider';
-import {
-  convertMillisToDuration,
-  convertDurationToMillis,
-} from '../services/utilities';
+// import {
+//   convertMillisToDuration,
+//   convertDurationToMillis,
+// } from '../services/utilities';
 // import {useDispatch, useSelector} from 'react-redux';
 
 // Assets
@@ -41,6 +41,7 @@ import TrackPlayer, {
 // import {useStores} from '../store/rootStore';
 // import {useDebouncedValue} from '../hooks/useDebouncedValue';
 import {ActivityIndicator} from 'react-native';
+import moment from 'moment-timezone';
 function renderThumb() {
   return <Thumb />;
 }
@@ -48,8 +49,10 @@ function renderThumb() {
 const StoryDetails = ({navigation, route}) => {
   const {item, fav} = route?.params;
   const state = usePlaybackState();
-  const isPlaying = state === State.Playing || state === State.Ready;
+  const isPlaying = state === State.Playing;
+  const isReady = state === State.Ready;
   const isLoading = state === State.Connecting || state === State.Buffering;
+  const [isEvaluationVisible, setIsEvaluationVisible] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const {position: currentPosition, duration: currentDuration} =
@@ -66,17 +69,24 @@ const StoryDetails = ({navigation, route}) => {
 
   let progressHours,
     durationHours = false;
-  let progressPosition = moment().startOf('day').seconds(progress?.position);
-  let progressDuration = moment().startOf('day').seconds(progress?.duration);
+  let progressPosition = moment().startOf('day').seconds(currentPosition);
+  let progressDuration = moment().startOf('day').seconds(currentDuration);
 
-  if (currentPosition) {
-    progressHours = progressPosition?.format('HH') !== '00';
-    durationHours = progressDuration?.format('HH') !== '00';
-  }
+  console.log('====================================');
+  console.log(`currentPosition ${currentPosition}`);
+  console.log('====================================');
+  console.log('====================================');
+  console.log(`currentDuration ${currentDuration}`);
+  console.log('====================================');
+
+  const gradientColors = [
+    'rgba(42, 46, 49, 0)',
+    'rgba(26, 28, 29, 0.8)',
+    'rgb(25, 26, 28)',
+  ];
 
   useEffect(() => {
     const setupPlayer = async () => {
-      await TrackPlayer.setupPlayer();
       const tracks = await TrackPlayer.getQueue();
       const currentTrack = await TrackPlayer.getCurrentTrack();
       const track = tracks[currentTrack];
@@ -102,6 +112,27 @@ const StoryDetails = ({navigation, route}) => {
     setupPlayer();
   }, []);
 
+  const shareStory = async () => {
+    try {
+      const result = await Share.share({
+        message: item.music,
+      });
+      console.log(result);
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('activityType', result.activityType);
+          // shared with activity type of result.activityType
+        } else {
+          console.log('shared');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log('dismissed');
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   const onPlay = async () => {
     await TrackPlayer.reset();
     // const {item} = route.params;
@@ -112,14 +143,6 @@ const StoryDetails = ({navigation, route}) => {
       artist: '',
       artwork: item?.image,
     }).then(async (index: number) => {
-      if (item?.user_progress && item?.user_progress !== '00:00:00') {
-        TrackPlayer.seekTo(parseFloat(item.user_progress)).then(async () => {
-          await TrackPlayer.play();
-        });
-      } else {
-        await TrackPlayer.play();
-      }
-
       setSoundInfo({
         currentTrack: index,
         sound: item.sound,
@@ -133,11 +156,7 @@ const StoryDetails = ({navigation, route}) => {
     setDuration(currentDuration);
   }, [currentPosition, currentDuration]);
 
-  const seekTo = async value => {
-    await TrackPlayer.seekTo(value);
-  };
-
-  const formatTime = timeInSeconds => {
+  const formatTime = (timeInSeconds: any) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
 
@@ -151,9 +170,10 @@ const StoryDetails = ({navigation, route}) => {
       <View style={styles.screenHeader}>
         <View style={styles.headerLogs}>
           <TouchableOpacity
-            onPress={() => {
+            onPress={async () => {
               // soundState?.unloadAsync();
               // soundState?.stopAsync();
+              await TrackPlayer.reset();
               navigation.goBack();
             }}>
             <CircularIcon
@@ -225,22 +245,14 @@ const StoryDetails = ({navigation, route}) => {
                 color={Colors.sliderTrackTint}
                 size={17}
                 style={styles.playerPeriodText}>
-                {!currentPosition
-                  ? progressPosition.format(
-                      progressHours ? 'hh:mm:ss' : 'mm:ss',
-                    )
-                  : '0:00'}
+                {formatTime(currentPosition)}
               </Text>
               <Text
                 SFProRoundedMedium
                 color={Colors.white}
                 size={17}
                 style={styles.playerPeriodText}>
-                {!currentPosition
-                  ? progressDuration.format(
-                      durationHours ? 'hh:mm:ss' : 'mm:ss',
-                    )
-                  : '00:00'}
+                {formatTime(currentDuration)}
               </Text>
             </View>
 
@@ -257,7 +269,13 @@ const StoryDetails = ({navigation, route}) => {
                   width: 76,
                   height: 76,
                 }}
-                onPress={isPlaying ? TrackPlayer.pause : TrackPlayer.play}>
+                onPress={async () => {
+                  if (isPlaying) {
+                    await TrackPlayer.pause();
+                  } else {
+                    await TrackPlayer.play();
+                  }
+                }}>
                 {isPlaying ? <PauseWithCircle /> : <PlayerPlay />}
               </TouchableOpacity>
 
@@ -275,8 +293,9 @@ const StoryDetails = ({navigation, route}) => {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
+              marginTop: 100,
             }}>
-            <ActivityIndicator />
+            <ActivityIndicator color={'#FFFFFF'} size={'large'} />
           </View>
         )}
 
