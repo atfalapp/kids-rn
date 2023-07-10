@@ -41,7 +41,7 @@ import TrackPlayer, {
 // import {useStores} from '../store/rootStore';
 // import {useDebouncedValue} from '../hooks/useDebouncedValue';
 import {ActivityIndicator} from 'react-native';
-import moment from 'moment-timezone';
+
 function renderThumb() {
   return <Thumb />;
 }
@@ -66,11 +66,6 @@ const StoryDetails = ({navigation, route}) => {
     sound: '',
     inProgress: false,
   });
-
-  let progressHours,
-    durationHours = false;
-  let progressPosition = moment().startOf('day').seconds(currentPosition);
-  let progressDuration = moment().startOf('day').seconds(currentDuration);
 
   console.log('====================================');
   console.log(`currentPosition ${currentPosition}`);
