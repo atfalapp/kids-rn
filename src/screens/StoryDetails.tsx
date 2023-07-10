@@ -33,165 +33,116 @@ import {
   PauseWithCircle,
   PlayerPlay,
 } from '../assets/images/iconSvg/index.js';
-import {url} from '../services/config';
-import {Audio} from 'expo-av';
-import {useStores} from '../store/rootStore';
+import TrackPlayer, {
+  useProgress,
+  State,
+  usePlaybackState,
+} from 'react-native-track-player';
+// import {useStores} from '../store/rootStore';
+// import {useDebouncedValue} from '../hooks/useDebouncedValue';
+import {ActivityIndicator} from 'react-native';
 function renderThumb() {
   return <Thumb />;
 }
 
 const StoryDetails = ({navigation, route}) => {
-  const store = useStores();
-  // const dispatch = useDispatch();
-  // const {isPlaying, currentPlayed} = useSelector(({app}) => ({
-  //   isPlaying: app.isPlaying,
-  //   currentPlayed: app.currentPlayed,
-  // }));
-
-  console.log('isPlaying', store.audioStore.isPlaying);
-
-  // console.log(url);
   const {item, fav} = route?.params;
-  // const { item, sound, fav } = route?.params;
-  const duration = convertDurationToMillis(item?.time);
-  const [isEvaluationVisible, setIsEvaluationVisible] = useState(false);
-  const [isPlayed, setIsPlayed] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const [soundState, setSound] = useState(null);
+  const state = usePlaybackState();
+  const isPlaying = state === State.Playing || state === State.Ready;
+  const isLoading = state === State.Connecting || state === State.Buffering;
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const {position: currentPosition, duration: currentDuration} =
+    useProgress(250);
+  const [soundInfo, setSoundInfo] = useState<{
+    currentTrack: number;
+    sound: string;
+    inProgress: boolean;
+  }>({
+    currentTrack: -1,
+    sound: '',
+    inProgress: false,
+  });
 
-  const gradientColors = [
-    'rgba(42, 46, 49, 0)',
-    'rgba(26, 28, 29, 0.8)',
-    'rgb(25, 26, 28)',
-  ];
+  let progressHours,
+    durationHours = false;
+  let progressPosition = moment().startOf('day').seconds(progress?.position);
+  let progressDuration = moment().startOf('day').seconds(progress?.duration);
 
-  async function loadSound() {
-    console.log('load');
-    console.log('Story: ', item);
-    const {sound} = await Audio.Sound.createAsync(
-      {
-        uri: item.music,
-        //   index == 0? url + "/audios/forests_flower/_rabbit_is_looking_for_mama.mp3":
-        //   index == 1? url + "/audios/forests_flower/forests_flower.mp3":
-      },
-      {
-        shouldPlay: false,
-        isMuted: false,
-        rate: 1.0,
-      },
-    );
-
-    setSound(sound);
+  if (currentPosition) {
+    progressHours = progressPosition?.format('HH') !== '00';
+    durationHours = progressDuration?.format('HH') !== '00';
   }
 
-  const shareStory = async () => {
-    try {
-      const result = await Share.share({
-        message: item.music,
-      });
-      console.log(result);
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          console.log('activityType', result.activityType);
-          // shared with activity type of result.activityType
-        } else {
-          console.log('shared');
-        }
-      } else if (result.action === Share.dismissedAction) {
-        console.log('dismissed');
+  useEffect(() => {
+    const setupPlayer = async () => {
+      await TrackPlayer.setupPlayer();
+      const tracks = await TrackPlayer.getQueue();
+      const currentTrack = await TrackPlayer.getCurrentTrack();
+      const track = tracks[currentTrack];
+      if (currentTrack != null && track?.id === item.id) {
+        setSoundInfo({
+          currentTrack,
+          sound: track.artist,
+          inProgress: true,
+        });
+        await TrackPlayer.play();
+      } else {
+        onPlay();
       }
-    } catch (error) {
-      alert(error.message);
-    }
+      // await TrackPlayer.add({
+      // id: item?.id,
+      // url: item?.music,
+      // title: item?.name,
+      // artist: '',
+      // artwork: item?.image,
+      // });
+    };
+
+    setupPlayer();
+  }, []);
+
+  const onPlay = async () => {
+    await TrackPlayer.reset();
+    // const {item} = route.params;
+    TrackPlayer.add({
+      id: item?.id,
+      url: item?.music,
+      title: item?.name,
+      artist: '',
+      artwork: item?.image,
+    }).then(async (index: number) => {
+      if (item?.user_progress && item?.user_progress !== '00:00:00') {
+        TrackPlayer.seekTo(parseFloat(item.user_progress)).then(async () => {
+          await TrackPlayer.play();
+        });
+      } else {
+        await TrackPlayer.play();
+      }
+
+      setSoundInfo({
+        currentTrack: index,
+        sound: item.sound,
+        inProgress: true,
+      });
+    });
   };
 
-  async function killSound() {
-    await soundState.setStatusAsync({positionMillis: 0});
-    setIsPlayed(false);
-    await soundState.pauseAsync();
-    store.audioStore.updateIsPlaying(false);
-    // dispatch({
-    //   type: 'PAUSED_SOUND',
-    // });
-    setCurrentPosition(0);
-  }
-
   useEffect(() => {
-    if (!soundState || (soundState && !soundState._loaded)) {
-      loadSound();
-    }
-  }, [soundState]);
+    setPosition(currentPosition);
+    setDuration(currentDuration);
+  }, [currentPosition, currentDuration]);
 
-  useEffect(() => {
-    if (soundState) {
-      soundState.setOnPlaybackStatusUpdate(({positionMillis}) => {
-        console.log(positionMillis, duration);
-        // 362266 362000
-        if (positionMillis >= duration) {
-          console.log('Sound Killed');
-          killSound();
-        } else {
-          // console.log("Current Position", currentPosition, "positionMillis", positionMillis, "isPlayed", isPlayed);
-          setCurrentPosition(positionMillis);
-        }
-      });
-    }
-    return soundState
-      ? () => {
-          console.log('Unloading Sound');
-          soundState.unloadAsync();
-          soundState.stopAsync();
-          store.audioStore.updateIsPlaying(false);
-          store.audioStore.updateCurrentlyPlayed(undefined);
-        }
-      : undefined;
-  }, [soundState]);
+  const seekTo = async value => {
+    await TrackPlayer.seekTo(value);
+  };
 
-  async function playSound() {
-    if (store.audioStore.isPlaying && store.audioStore.currentPlayed) {
-      console.log('unloaddddd');
-      store.audioStore.currentPlayed.unloadAsync();
-      store.audioStore.currentPlayed.stopAsync();
-      // setSound(undefined)
-    } else {
-      await soundState.playAsync();
-      setIsPlayed(true);
-      store.audioStore.updateIsPlaying(true);
-      store.audioStore.updateCurrentlyPlayed(soundState);
-      // dispatch({
-      //   type: 'PLAYING_SOUND',
-      //   payload: {
-      //     sound: soundState,
-      //   },
-      // });
-    }
-  }
+  const formatTime = timeInSeconds => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
 
-  async function pauseSound() {
-    await soundState.pauseAsync();
-    setIsPlayed(false);
-    store.audioStore.updateIsPlaying(false);
-    // dispatch({
-    //   type: 'PAUSED_SOUND',
-    // });
-  }
-
-  async function moveForward() {
-    let forpos =
-      currentPosition + 15000 <= duration ? currentPosition + 15000 : duration;
-    await onChange(forpos);
-  }
-
-  async function moveBackward() {
-    let backpos =
-      currentPosition - 15000 >= 0 ? currentPosition - 15000 : 0.0001;
-    await onChange(backpos);
-  }
-
-  async function onChange(value) {
-    setCurrentPosition(value);
-    await soundState.setStatusAsync({positionMillis: value});
-  }
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
 
   return (
     <ImageBackground
@@ -201,8 +152,8 @@ const StoryDetails = ({navigation, route}) => {
         <View style={styles.headerLogs}>
           <TouchableOpacity
             onPress={() => {
-              soundState?.unloadAsync();
-              soundState?.stopAsync();
+              // soundState?.unloadAsync();
+              // soundState?.stopAsync();
               navigation.goBack();
             }}>
             <CircularIcon
@@ -248,70 +199,86 @@ const StoryDetails = ({navigation, route}) => {
             : item.title}
         </Text>
 
-        <View style={styles.player}>
-          <Slider
-            minimumValue={0}
-            maximumValue={duration}
-            value={currentPosition}
-            onValueChange={value => onChange(value[0])}
-            trackStyle={{
-              borderRadius: 5,
-              height: 7,
-            }}
-            containerStyle={{
-              width: '100%',
-            }}
-            renderThumbComponent={renderThumb}
-            thumbTintColor={Colors.white}
-            minimumTrackTintColor={Colors.sliderTrackTint}
-            maximumTrackTintColor={Colors.sliderTransparent}
-          />
-
-          <View style={styles.playerPeriodsView}>
-            <Text
-              SFProRoundedMedium
-              color={Colors.sliderTrackTint}
-              size={17}
-              style={styles.playerPeriodText}>
-              {convertMillisToDuration(currentPosition)}
-            </Text>
-            <Text
-              SFProRoundedMedium
-              color={Colors.white}
-              size={17}
-              style={styles.playerPeriodText}>
-              {convertMillisToDuration(duration)}
-            </Text>
-          </View>
-
-          <View style={styles.playerIcons}>
-            <TouchableOpacity onPress={moveBackward}>
-              <GoBackward />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                width: 76,
-                height: 76,
+        {!isLoading ? (
+          <View style={styles.player}>
+            <Slider
+              minimumValue={0}
+              maximumValue={currentDuration}
+              value={currentPosition}
+              onValueChange={value => TrackPlayer.seekTo(value[0])}
+              trackStyle={{
+                borderRadius: 5,
+                height: 7,
               }}
-              onPress={() => {
-                console.log('====================================');
-                console.log('play clicked');
-                console.log('====================================');
-                if (store.audioStore.isPlayed) {
-                  pauseSound();
-                } else {
-                  playSound();
-                }
-              }}>
-              {isPlayed ? <PauseWithCircle /> : <PlayerPlay />}
-            </TouchableOpacity>
+              containerStyle={{
+                width: '100%',
+              }}
+              renderThumbComponent={renderThumb}
+              thumbTintColor={Colors.white}
+              minimumTrackTintColor={Colors.sliderTrackTint}
+              maximumTrackTintColor={Colors.sliderTransparent}
+            />
 
-            <TouchableOpacity onPress={moveForward}>
-              <GoForward />
-            </TouchableOpacity>
+            <View style={styles.playerPeriodsView}>
+              <Text
+                SFProRoundedMedium
+                color={Colors.sliderTrackTint}
+                size={17}
+                style={styles.playerPeriodText}>
+                {!currentPosition
+                  ? progressPosition.format(
+                      progressHours ? 'hh:mm:ss' : 'mm:ss',
+                    )
+                  : '0:00'}
+              </Text>
+              <Text
+                SFProRoundedMedium
+                color={Colors.white}
+                size={17}
+                style={styles.playerPeriodText}>
+                {!currentPosition
+                  ? progressDuration.format(
+                      durationHours ? 'hh:mm:ss' : 'mm:ss',
+                    )
+                  : '00:00'}
+              </Text>
+            </View>
+
+            <View style={styles.playerIcons}>
+              <TouchableOpacity
+                onPress={() => {
+                  TrackPlayer.seekTo(currentPosition - 15);
+                }}>
+                <GoBackward />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  width: 76,
+                  height: 76,
+                }}
+                onPress={isPlaying ? TrackPlayer.pause : TrackPlayer.play}>
+                {isPlaying ? <PauseWithCircle /> : <PlayerPlay />}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  TrackPlayer.seekTo(currentPosition + 15);
+                }}>
+                <GoForward />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator />
+          </View>
+        )}
 
         <View style={styles.footerLogs}>
           <TouchableOpacity

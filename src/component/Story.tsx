@@ -10,7 +10,6 @@ import {useNavigation} from '@react-navigation/native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import Text from './Text';
 import {Play} from '../assets/images/iconSvg';
-import {Audio} from 'expo-av';
 import {url} from '../services/config';
 
 const Story = ({item, fav, index}) => {

@@ -2,8 +2,17 @@ import moment from 'moment-timezone';
 // const moment = require('moment-timezone');
 
 export const convertMillisToDuration = (millis: any) => {
+  console.log('====================================');
+  console.log('millis value --->');
+  console.log('====================================');
   var minutes = Math.floor(millis / 60000);
+  console.log('====================================');
+  console.log(`minutes of ${millis}--->>`, minutes);
+  console.log('====================================');
   var seconds = ((millis % 60000) / 1000).toFixed(0);
+  console.log('====================================');
+  console.log(`secs of ${millis}--->>`, seconds);
+  console.log('====================================');
   return minutes + ':' + (parseInt(seconds, 10) < 10 ? '0' : '') + seconds;
 };
 

@@ -23,6 +23,7 @@ import BLUE_BIRD from './src/assets/blue-bird-bg.png';
 
 import RootStore from './src/store/rootStore';
 import {Provider} from 'mobx-react';
+import TrackPlayer from 'react-native-track-player';
 
 export default function App() {
   const [IsReady, SetIsReady] = useState(false);
