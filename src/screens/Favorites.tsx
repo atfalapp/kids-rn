@@ -20,8 +20,12 @@ import {RemoveIcon} from '../assets/images/iconSvg/index.js';
 import {BackIcon} from '../assets/images/iconSvg/index.js';
 import {Text, Story, CircularIcon} from '../component';
 import {Platform} from 'react-native';
+import MiniAudio from '../component/MiniAudio';
+import {useStores} from '../store/rootStore';
 
 const Favorites = ({navigation}) => {
+  const store = useStores();
+
   const mainGradientColors = [
     'rgba(196, 214, 84, 0)',
     'rgba(196, 215, 85, 0.5)',
@@ -224,86 +228,93 @@ const Favorites = ({navigation}) => {
   };
 
   return (
-    <LinearGradient
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 1.9}}
-      colors={mainGradientColors}
-      style={styles.favoritesContainer}>
-      <ImageBackground
-        source={require('../assets/images/Favorites-Master.png')}
-        style={styles.favoritesHeader}>
-        <TouchableOpacity
-          style={{
-            paddingTop: Platform.OS == 'ios' ? 70 : 50,
-            marginBottom: '-22.5%',
-            marginHorizontal: '5%',
-            zIndex: 1,
-          }}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <CircularIcon
-            Icon={BackIcon}
-            circleSize={50}
-            borderColor="rgba(255, 255, 255, 0.11)"
-            backgroundColor="rgba(255, 255, 255, 0.11)"
-            style={undefined}
-            blur={undefined}
-            statistics={undefined}
-            minutesNum={undefined}
-          />
-        </TouchableOpacity>
-        <Text
-          VibesRegular
-          size={66}
-          color={Colors.white}
-          style={styles.favoritesTitle}>
-          المفضّلة
-        </Text>
-        <View style={styles.favoritesHeaderBackground}>
-          <Image
-            style={styles.plate2}
-            source={require('../assets/images/Plant2.png')}
-          />
-          <Text GulfText size={13} color={Colors.white} style={styles.subTitle}>
-            اسحب القصة إلى اليمين لإزالتها من المفضلة.
-          </Text>
-          <Image
-            style={styles.plate1}
-            source={require('../assets/images/Plant1.png')}
-          />
-        </View>
-      </ImageBackground>
-
+    <>
       <LinearGradient
-        start={{x: 2, y: 1}}
-        end={{x: 1, y: 1}}
-        colors={smallGradientColors}
-        style={styles.smallGradient}
-      />
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1.9}}
+        colors={mainGradientColors}
+        style={styles.favoritesContainer}>
+        <ImageBackground
+          source={require('../assets/images/Favorites-Master.png')}
+          style={styles.favoritesHeader}>
+          <TouchableOpacity
+            style={{
+              paddingTop: Platform.OS == 'ios' ? 70 : 50,
+              marginBottom: '-22.5%',
+              marginHorizontal: '5%',
+              zIndex: 1,
+            }}
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <CircularIcon
+              Icon={BackIcon}
+              circleSize={50}
+              borderColor="rgba(255, 255, 255, 0.11)"
+              backgroundColor="rgba(255, 255, 255, 0.11)"
+              style={undefined}
+              blur={undefined}
+              statistics={undefined}
+              minutesNum={undefined}
+            />
+          </TouchableOpacity>
+          <Text
+            VibesRegular
+            size={66}
+            color={Colors.white}
+            style={styles.favoritesTitle}>
+            المفضّلة
+          </Text>
+          <View style={styles.favoritesHeaderBackground}>
+            <Image
+              style={styles.plate2}
+              source={require('../assets/images/Plant2.png')}
+            />
+            <Text
+              GulfText
+              size={13}
+              color={Colors.white}
+              style={styles.subTitle}>
+              اسحب القصة إلى اليمين لإزالتها من المفضلة.
+            </Text>
+            <Image
+              style={styles.plate1}
+              source={require('../assets/images/Plant1.png')}
+            />
+          </View>
+        </ImageBackground>
 
-      <ScrollView style={styles.StoriesView}>
-        <SwipeListView
-          data={listData}
-          renderItem={renderItem}
-          renderHiddenItem={renderHiddenItem}
-          leftOpenValue={90}
-          rightOpenValue={-150}
-          disableLeftSwipe
-          onRowDidOpen={onRowDidOpen}
-          // rightActionActivated={100}
-          // leftActionActivated={-200}
-          rightActionValue={0}
-          leftActionValue={-500}
-          onRightAction={onLeftAction}
-          onLeftAction={onRightAction}
-          onRightActionStatusChange={onLeftActionStatusChange}
-          onLeftActionStatusChange={onRightActionStatusChange}
+        <LinearGradient
+          start={{x: 2, y: 1}}
+          end={{x: 1, y: 1}}
+          colors={smallGradientColors}
+          style={styles.smallGradient}
         />
-      </ScrollView>
 
-      <View style={{marginVertical: 58}} />
-    </LinearGradient>
+        <ScrollView style={styles.StoriesView}>
+          <SwipeListView
+            data={listData}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            leftOpenValue={90}
+            rightOpenValue={-150}
+            disableLeftSwipe
+            onRowDidOpen={onRowDidOpen}
+            // rightActionActivated={100}
+            // leftActionActivated={-200}
+            rightActionValue={0}
+            leftActionValue={-500}
+            onRightAction={onLeftAction}
+            onLeftAction={onRightAction}
+            onRightActionStatusChange={onLeftActionStatusChange}
+            onLeftActionStatusChange={onRightActionStatusChange}
+          />
+        </ScrollView>
+
+        <View style={{marginVertical: 58}} />
+      </LinearGradient>
+      {store.audioStore?.item && <MiniAudio bottom={90} />}
+    </>
   );
 };
 export default Favorites;

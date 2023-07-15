@@ -7,9 +7,12 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import * as Colors from '../styles/Colors';
 import {Text, CircularIcon, StatisticsSquare} from '../component';
+import {useStores} from '../store/rootStore';
+import MiniAudio from '../component/MiniAudio';
 const smallScreen = Dimensions.get('window').height <= 700;
 
 const Statistics = ({navigation}) => {
+  const store = useStores();
   const gradientColors = [
     'rgb(41,108,212)',
     'rgb(79,179,239)',
@@ -30,141 +33,144 @@ const Statistics = ({navigation}) => {
   const shapeSize = smallScreen ? 140 : 140;
 
   return (
-    <LinearGradient
-      start={{x: 1, y: 0}}
-      end={{x: 1, y: 1}}
-      colors={gradientColors}
-      style={styles.StatisticsScreen}>
-      <Text
-        GulfBold
-        color={Colors.white}
-        size={17}
-        style={styles.statisticsTitle}>
-        الإحصائيات
-      </Text>
-
-      <Text
-        GulfText
-        color={Colors.white}
-        size={13}
-        style={styles.statisticsSubTitle}>
-        محاولة الوصول إلى الحد اليومي المقترح يساعد أطفالك على الإستفادة القصوى
-        من أهداف التطبيق وما يحتويه من قصص.
-      </Text>
-      <View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{marginHorizontal: 25}}>
-          <StatisticsSquare
-            storiesNum={2}
-            squareSize={shapeSize}
-            backgroundColor={Colors.shapesColor}
-            style={styles.statisticsShape}
-          />
-          <CircularIcon
-            statistics
-            minutesNum={16.32}
-            circleSize={shapeSize}
-            borderColor={Colors.shapesColor}
-            backgroundColor={Colors.shapesColor}
-            style={styles.statisticsShape}
-            blur={undefined}
-            Icon={undefined}
-          />
-          <StatisticsSquare
-            storiesNum={2}
-            squareSize={shapeSize}
-            backgroundColor={Colors.shapesColor}
-            style={styles.statisticsShape}
-          />
-        </ScrollView>
-      </View>
-
-      <View style={{...styles.goalsView}}>
+    <>
+      <LinearGradient
+        start={{x: 1, y: 0}}
+        end={{x: 1, y: 1}}
+        colors={gradientColors}
+        style={styles.StatisticsScreen}>
         <Text
-          VibesRegular
-          color={Colors.paua}
-          style={styles.targetTitle}
-          size={goalsHeadingTextSize}>
-          أهدافنا
+          GulfBold
+          color={Colors.white}
+          size={17}
+          style={styles.statisticsTitle}>
+          الإحصائيات
         </Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: goalsMargin,
-          }}>
-          <View
+
+        <Text
+          GulfText
+          color={Colors.white}
+          size={13}
+          style={styles.statisticsSubTitle}>
+          محاولة الوصول إلى الحد اليومي المقترح يساعد أطفالك على الإستفادة
+          القصوى من أهداف التطبيق وما يحتويه من قصص.
+        </Text>
+        <View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{marginHorizontal: 25}}>
+            <StatisticsSquare
+              storiesNum={2}
+              squareSize={shapeSize}
+              backgroundColor={Colors.shapesColor}
+              style={styles.statisticsShape}
+            />
+            <CircularIcon
+              statistics
+              minutesNum={16.32}
+              circleSize={shapeSize}
+              borderColor={Colors.shapesColor}
+              backgroundColor={Colors.shapesColor}
+              style={styles.statisticsShape}
+              blur={undefined}
+              Icon={undefined}
+            />
+            <StatisticsSquare
+              storiesNum={2}
+              squareSize={shapeSize}
+              backgroundColor={Colors.shapesColor}
+              style={styles.statisticsShape}
+            />
+          </ScrollView>
+        </View>
+
+        <View style={{...styles.goalsView}}>
+          <Text
+            VibesRegular
+            color={Colors.paua}
+            style={styles.targetTitle}
+            size={goalsHeadingTextSize}>
+            أهدافنا
+          </Text>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
             style={{
-              width: '100%',
-              // justifyContent: 'center',
-              alignItems: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: goalsMargin,
             }}>
-            <Text
-              GulfText
-              color={Colors.paua}
-              style={styles.target}
-              size={goalTextSize}>
-              ✦ رفع مستوى التركيز للطفل.
-            </Text>
-            <Text
-              GulfText
-              color={Colors.paua}
-              size={goalTextSize}
-              style={{marginLeft: '-45%'}}>
-              ✦ إغناء الثروة اللغوية للطفل.
-            </Text>
-          </View>
-          <View>
-            <Text
-              GulfText
-              color={Colors.paua}
-              size={goalTextSize}
+            <View
               style={{
-                width: 220,
-                marginLeft: '-175%',
-                textAlign: 'right',
+                width: '100%',
+                // justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              ✦ المساهمة بتطوير خيال الطفل.
-            </Text>
-            <Text
-              GulfText
-              color={Colors.paua}
-              size={goalTextSize}
-              style={{
-                width: 450,
-                marginLeft: -290,
-                marginRight: 70,
-              }}>
-              {
-                '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
-              }
-            </Text>
-          </View>
-        </ScrollView>
-      </View>
+              <Text
+                GulfText
+                color={Colors.paua}
+                style={styles.target}
+                size={goalTextSize}>
+                ✦ رفع مستوى التركيز للطفل.
+              </Text>
+              <Text
+                GulfText
+                color={Colors.paua}
+                size={goalTextSize}
+                style={{marginLeft: '-45%'}}>
+                ✦ إغناء الثروة اللغوية للطفل.
+              </Text>
+            </View>
+            <View>
+              <Text
+                GulfText
+                color={Colors.paua}
+                size={goalTextSize}
+                style={{
+                  width: 220,
+                  marginLeft: '-175%',
+                  textAlign: 'right',
+                }}>
+                ✦ المساهمة بتطوير خيال الطفل.
+              </Text>
+              <Text
+                GulfText
+                color={Colors.paua}
+                size={goalTextSize}
+                style={{
+                  width: 450,
+                  marginLeft: -290,
+                  marginRight: 70,
+                }}>
+                {
+                  '✦ دغدغة الثقافات الثلاثة الضرورية لتطور الطفل \n(الحسية، العقلية، الإتصالية).'
+                }
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
 
-      <Image
-        source={require('../assets/images/Landscape.png')}
-        style={styles.landscape}
-      />
-      <Image
-        source={require('../assets/images/Windmill-Blades.png')}
-        style={styles.windmillBlades}
-      />
-      <Image
-        source={require('../assets/images/Balloon.png')}
-        style={styles.balloon}
-      />
+        <Image
+          source={require('../assets/images/Landscape.png')}
+          style={styles.landscape}
+        />
+        <Image
+          source={require('../assets/images/Windmill-Blades.png')}
+          style={styles.windmillBlades}
+        />
+        <Image
+          source={require('../assets/images/Balloon.png')}
+          style={styles.balloon}
+        />
 
-      <Image
-        source={require('../assets/images/Windmill-Gradients.png')}
-        style={styles.gradientsImg}
-      />
-    </LinearGradient>
+        <Image
+          source={require('../assets/images/Windmill-Gradients.png')}
+          style={styles.gradientsImg}
+        />
+      </LinearGradient>
+      {store.audioStore?.item && <MiniAudio bottom={90} />}
+    </>
   );
 };
 export default Statistics;

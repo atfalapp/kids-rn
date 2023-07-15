@@ -3,6 +3,7 @@ import {makeAutoObservable} from 'mobx';
 class AudioStore {
   isPlaying: boolean;
   currentPlayed: any;
+  item: any;
 
   constructor() {
     makeAutoObservable(this);
@@ -18,6 +19,10 @@ class AudioStore {
   }
   updateCurrentlyPlayed(value: any) {
     this.currentPlayed = value;
+  }
+
+  updateItem(value: any) {
+    this.item = value;
   }
 }
 

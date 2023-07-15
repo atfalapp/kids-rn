@@ -14,9 +14,12 @@ import {Backspace, BlueMinimizeIcon} from '../assets/images/iconSvg';
 import {Text, CircularIcon} from '../component';
 import * as Colors from '../styles/Colors';
 
+import {useStores} from '../store/rootStore';
+import MiniAudio from '../component/MiniAudio';
 const windowHeight = Dimensions.get('window').height;
 
 const ParentsAccess = ({navigation}) => {
+  const store = useStores();
   const numbers = [
     [3, 2, 1],
     [6, 5, 4],
@@ -45,114 +48,120 @@ const ParentsAccess = ({navigation}) => {
   // }, [prop, state]);
 
   return (
-    <View style={styles.parentsAccessScreen}>
-      <View style={{backgroundColor: Colors.lightCyan}}>
-        <TouchableOpacity
-          style={styles.parentsAccessHeaderLogs}
-          onPress={() => navigation.goBack()}>
-          <CircularIcon
-            Icon={BlueMinimizeIcon}
-            circleSize={50}
-            borderColor={Colors.parentsAccessTransparent}
-            backgroundColor={Colors.parentsAccessTransparent}
-            style={undefined}
-            blur={undefined}
-            statistics={undefined}
-            minutesNum={undefined}
-          />
-        </TouchableOpacity>
-        <View style={styles.parentsAccessHeaderImages}>
-          <Image
-            style={styles.carImg}
-            source={require('../assets/images/Car.png')}
-          />
+    <>
+      <View style={styles.parentsAccessScreen}>
+        <View style={{backgroundColor: Colors.lightCyan}}>
+          <TouchableOpacity
+            style={styles.parentsAccessHeaderLogs}
+            onPress={() => navigation.goBack()}>
+            <CircularIcon
+              Icon={BlueMinimizeIcon}
+              circleSize={50}
+              borderColor={Colors.parentsAccessTransparent}
+              backgroundColor={Colors.parentsAccessTransparent}
+              style={undefined}
+              blur={undefined}
+              statistics={undefined}
+              minutesNum={undefined}
+            />
+          </TouchableOpacity>
+          <View style={styles.parentsAccessHeaderImages}>
+            <Image
+              style={styles.carImg}
+              source={require('../assets/images/Car.png')}
+            />
 
-          <Image
-            style={styles.envImg}
-            source={require('../assets/images/Environment.png')}
-          />
-        </View>
-      </View>
-      <ImageBackground
-        style={styles.parentsAccessBody}
-        source={require('../assets/images/Ground.png')}>
-        <Text
-          VibesRegular
-          color={Colors.paua}
-          size={52}
-          style={[styles.parentsAccessTexts, {marginTop: 20}]}>
-          منطقة الوالدين
-        </Text>
-
-        <Text
-          GulfMedium
-          color={Colors.paua}
-          size={17}
-          style={styles.parentsAccessTexts}>
-          للمتابعة، رجاءً أدخل الأرقام التالية
-        </Text>
-
-        <Text
-          GulfBold
-          color={Colors.paua}
-          size={17}
-          style={styles.parentsAccessTexts}>
-          ثمانية، ثلاثة، واحد، سبعة
-        </Text>
-
-        <View style={[styles.numpadContainer]}>
-          {numbers.map((row, index) => {
-            console.log(passcode);
-            return (
-              <View key={index} style={styles.numpadWrapper}>
-                {row.map(number => {
-                  let oneStyle = number === 1 ? {marginRight: 10} : null;
-                  return (
-                    <View key={number} style={styles.numpad}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          if (passcode + number == '8317') {
-                            navigation.navigate('ParentsArea');
-                            setPasscode('');
-                          } else setPasscode(passcode + number);
-                        }}>
-                        <Text
-                          SFProDisplayRegular
-                          size={25}
-                          style={[styles.numpadNumber, oneStyle]}>
-                          {number}
-                        </Text>
-                        <Text
-                          SFProTextBold
-                          size={10}
-                          style={styles.numpadNumber}>
-                          {letters[number - 1]}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })}
-              </View>
-            );
-          })}
-          <View style={styles.numpadWrapper}>
-            <View style={[styles.numpad, {marginLeft: 0}]}>
-              <TouchableOpacity
-                onPress={() => setPasscode(passcode.slice(0, -1))}>
-                <Backspace />
-              </TouchableOpacity>
-            </View>
-            <View style={[styles.numpad, {position: 'absolute', right: 120}]}>
-              <TouchableOpacity>
-                <Text SFProDisplayRegular size={25} style={styles.numpadNumber}>
-                  0
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <Image
+              style={styles.envImg}
+              source={require('../assets/images/Environment.png')}
+            />
           </View>
         </View>
-      </ImageBackground>
-    </View>
+        <ImageBackground
+          style={styles.parentsAccessBody}
+          source={require('../assets/images/Ground.png')}>
+          <Text
+            VibesRegular
+            color={Colors.paua}
+            size={52}
+            style={[styles.parentsAccessTexts, {marginTop: 20}]}>
+            منطقة الوالدين
+          </Text>
+
+          <Text
+            GulfMedium
+            color={Colors.paua}
+            size={17}
+            style={styles.parentsAccessTexts}>
+            للمتابعة، رجاءً أدخل الأرقام التالية
+          </Text>
+
+          <Text
+            GulfBold
+            color={Colors.paua}
+            size={17}
+            style={styles.parentsAccessTexts}>
+            ثمانية، ثلاثة، واحد، سبعة
+          </Text>
+
+          <View style={[styles.numpadContainer]}>
+            {numbers.map((row, index) => {
+              console.log(passcode);
+              return (
+                <View key={index} style={styles.numpadWrapper}>
+                  {row.map(number => {
+                    let oneStyle = number === 1 ? {marginRight: 10} : null;
+                    return (
+                      <View key={number} style={styles.numpad}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (passcode + number == '8317') {
+                              navigation.navigate('ParentsArea');
+                              setPasscode('');
+                            } else setPasscode(passcode + number);
+                          }}>
+                          <Text
+                            SFProDisplayRegular
+                            size={25}
+                            style={[styles.numpadNumber, oneStyle]}>
+                            {number}
+                          </Text>
+                          <Text
+                            SFProTextBold
+                            size={10}
+                            style={styles.numpadNumber}>
+                            {letters[number - 1]}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+              );
+            })}
+            <View style={styles.numpadWrapper}>
+              <View style={[styles.numpad, {marginLeft: 0}]}>
+                <TouchableOpacity
+                  onPress={() => setPasscode(passcode.slice(0, -1))}>
+                  <Backspace />
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.numpad, {position: 'absolute', right: 120}]}>
+                <TouchableOpacity>
+                  <Text
+                    SFProDisplayRegular
+                    size={25}
+                    style={styles.numpadNumber}>
+                    0
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </ImageBackground>
+      </View>
+      {store.audioStore?.item ? <MiniAudio /> : null}
+    </>
   );
 };
 export default ParentsAccess;

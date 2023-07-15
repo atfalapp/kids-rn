@@ -16,175 +16,182 @@ import Child from '../component/Child';
 import * as Colors from '../styles/Colors';
 import {children} from '../utils/constants';
 
+import {useStores} from '../store/rootStore';
+import MiniAudio from '../component/MiniAudio';
+
 const ParentsArea = ({navigation}) => {
+  const store = useStores();
   return (
-    <View style={styles.parentsAccessScreen}>
-      <View style={{backgroundColor: Colors.lightCyan}}>
-        <TouchableOpacity
-          style={styles.parentsAccessHeaderLogs}
-          onPress={() => navigation.goBack()}>
-          <CircularIcon
-            Icon={BlueBack}
-            circleSize={50}
-            borderColor={Colors.parentsAccessTransparent}
-            backgroundColor={Colors.parentsAccessTransparent}
-            style={undefined}
-            blur={undefined}
-            statistics={undefined}
-            minutesNum={undefined}
-          />
-        </TouchableOpacity>
-        <View style={styles.parentsAccessHeaderImages}>
-          <View style={styles.title}>
-            <Text VibesRegular size={45} color={Colors.paua}>
-              {'منطقة '}
-            </Text>
-            <Text
-              VibesRegular
-              size={45}
-              color={Colors.paua}
-              style={{marginTop: -35}}>
-              {'الوالدين'}
-            </Text>
-          </View>
-
-          <Image
-            style={styles.envImg}
-            source={require('../assets/images/Environment2.png')}
-          />
-        </View>
-      </View>
-
-      <ScrollView style={styles.mainScrollView}>
-        <View style={styles.yourChildren}>
-          <Text
-            GulfSemiBold
-            size={17}
-            color={Colors.paua}
-            style={{paddingHorizontal: '5%'}}>
-            أطفالك
-          </Text>
-          <Text
-            GulfText
-            size={14}
-            color={Colors.ParentsAreaText}
-            style={{paddingHorizontal: '5%', lineHeight: 30}}>
-            معرفة عمر وجنس أطفالك يساعدنا على انتقاء الاختيارات المناسبة لهم.
-          </Text>
-
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.childrenView}>
-            {children.map((item, index) => {
-              return (
-                <Child
-                  key={index}
-                  item={item}
-                  index={index}
-                  length={children.length - 1}
-                  style={undefined}
-                />
-              );
-            })}
-            <View style={{display: 'flex', marginHorizontal: '3%'}}>
-              <TouchableOpacity style={styles.add}>
-                <Add />
-              </TouchableOpacity>
+    <>
+      <View style={styles.parentsAccessScreen}>
+        <View style={{backgroundColor: Colors.lightCyan}}>
+          <TouchableOpacity
+            style={styles.parentsAccessHeaderLogs}
+            onPress={() => navigation.goBack()}>
+            <CircularIcon
+              Icon={BlueBack}
+              circleSize={50}
+              borderColor={Colors.parentsAccessTransparent}
+              backgroundColor={Colors.parentsAccessTransparent}
+              style={undefined}
+              blur={undefined}
+              statistics={undefined}
+              minutesNum={undefined}
+            />
+          </TouchableOpacity>
+          <View style={styles.parentsAccessHeaderImages}>
+            <View style={styles.title}>
+              <Text VibesRegular size={45} color={Colors.paua}>
+                {'منطقة '}
+              </Text>
               <Text
-                center
-                GulfSemiBold
+                VibesRegular
+                size={45}
                 color={Colors.paua}
-                size={15}
-                style={{right: '10%'}}>
-                أضف
+                style={{marginTop: -35}}>
+                {'الوالدين'}
               </Text>
             </View>
-          </ScrollView>
+
+            <Image
+              style={styles.envImg}
+              source={require('../assets/images/Environment2.png')}
+            />
+          </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.premiumSubscriptionView}
-          onPress={() => navigation.navigate('SubscriptionPlans')}>
-          <Image
-            source={require('../assets/images/PremiumSubscription.png')}
-            style={styles.subscriptionImage}
-          />
-          <View style={styles.subscriptionTexts}>
+        <ScrollView style={styles.mainScrollView}>
+          <View style={styles.yourChildren}>
             <Text
-              center
               GulfSemiBold
-              size={19}
-              color={Colors.white}
+              size={17}
+              color={Colors.paua}
               style={{paddingHorizontal: '5%'}}>
-              خطة الاشتراك
+              أطفالك
             </Text>
             <Text
               GulfText
-              size={16}
-              color={'#76f6ff'}
-              style={{paddingHorizontal: '5%'}}>
-              {
-                ' ✦ تمتع بوصول كامل لكافة القصص لأطفالك.\n ✦ قصص حصرية للمشتركين فقط.\n ✦ قصص جديدة ستضاف بشكل روتيني.'
-              }
+              size={14}
+              color={Colors.ParentsAreaText}
+              style={{paddingHorizontal: '5%', lineHeight: 30}}>
+              معرفة عمر وجنس أطفالك يساعدنا على انتقاء الاختيارات المناسبة لهم.
             </Text>
-            <Text center style={{paddingHorizontal: '10%', marginTop: '5%'}}>
-              <Text
-                GulfText
-                size={13}
-                color={Colors.white}
-                style={{lineHeight: 30}}>
-                {'تعرّف على الخطط المتوفرة والأسعار واختر ما يناسبك وأطفالك.'}
-              </Text>
-              <Text
-                GulfSemiBold
-                size={13}
-                color={Colors.white}
-                style={{lineHeight: 20}}>
-                {' تمتع ب ٧ أيام مجانية تجريبية.'}
-              </Text>
-            </Text>
-            <Button
-              purple
-              fontFamily="GulfSemiBold"
-              textSize={19}
-              textStyle={{marginTop: '-2%'}}
-              buttonStyle={styles.btn}
-              style={styles.thankYouButton}
-              onPress={() => navigation.navigate('SubscriptionPlans')}
-              disabled={undefined}
-              outline={undefined}
-              green={undefined}
-              orange={undefined}
-              iconName={undefined}>
-              اشترك الآن
-            </Button>
-          </View>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.settings}
-          onPress={() => navigation.navigate('Settings')}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{marginHorizontal: '7%'}}>
-              <Text GulfSemiBold size={19} color={Colors.paua} style={{}}>
-                الإعدادات
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.childrenView}>
+              {children.map((item, index) => {
+                return (
+                  <Child
+                    key={index}
+                    item={item}
+                    index={index}
+                    length={children.length - 1}
+                    style={undefined}
+                  />
+                );
+              })}
+              <View style={{display: 'flex', marginHorizontal: '3%'}}>
+                <TouchableOpacity style={styles.add}>
+                  <Add />
+                </TouchableOpacity>
+                <Text
+                  center
+                  GulfSemiBold
+                  color={Colors.paua}
+                  size={15}
+                  style={{right: '10%'}}>
+                  أضف
+                </Text>
+              </View>
+            </ScrollView>
+          </View>
+
+          <TouchableOpacity
+            style={styles.premiumSubscriptionView}
+            onPress={() => navigation.navigate('SubscriptionPlans')}>
+            <Image
+              source={require('../assets/images/PremiumSubscription.png')}
+              style={styles.subscriptionImage}
+            />
+            <View style={styles.subscriptionTexts}>
+              <Text
+                center
+                GulfSemiBold
+                size={19}
+                color={Colors.white}
+                style={{paddingHorizontal: '5%'}}>
+                خطة الاشتراك
               </Text>
               <Text
                 GulfText
                 size={16}
-                color={Colors.ParentsAreaText}
-                style={{bottom: '10%'}}>
-                إعدادات الحساب والتطبيق.
+                color={'#76f6ff'}
+                style={{paddingHorizontal: '5%'}}>
+                {
+                  ' ✦ تمتع بوصول كامل لكافة القصص لأطفالك.\n ✦ قصص حصرية للمشتركين فقط.\n ✦ قصص جديدة ستضاف بشكل روتيني.'
+                }
               </Text>
+              <Text center style={{paddingHorizontal: '10%', marginTop: '5%'}}>
+                <Text
+                  GulfText
+                  size={13}
+                  color={Colors.white}
+                  style={{lineHeight: 30}}>
+                  {'تعرّف على الخطط المتوفرة والأسعار واختر ما يناسبك وأطفالك.'}
+                </Text>
+                <Text
+                  GulfSemiBold
+                  size={13}
+                  color={Colors.white}
+                  style={{lineHeight: 20}}>
+                  {' تمتع ب ٧ أيام مجانية تجريبية.'}
+                </Text>
+              </Text>
+              <Button
+                purple
+                fontFamily="GulfSemiBold"
+                textSize={19}
+                textStyle={{marginTop: '-2%'}}
+                buttonStyle={styles.btn}
+                style={styles.thankYouButton}
+                onPress={() => navigation.navigate('SubscriptionPlans')}
+                disabled={undefined}
+                outline={undefined}
+                green={undefined}
+                orange={undefined}
+                iconName={undefined}>
+                اشترك الآن
+              </Button>
             </View>
-            <TouchableOpacity style={[styles.details, {left: wp('20%')}]}>
-              <Details />
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.settings}
+            onPress={() => navigation.navigate('Settings')}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginHorizontal: '7%'}}>
+                <Text GulfSemiBold size={19} color={Colors.paua} style={{}}>
+                  الإعدادات
+                </Text>
+                <Text
+                  GulfText
+                  size={16}
+                  color={Colors.ParentsAreaText}
+                  style={{bottom: '10%'}}>
+                  إعدادات الحساب والتطبيق.
+                </Text>
+              </View>
+              <TouchableOpacity style={[styles.details, {left: wp('20%')}]}>
+                <Details />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+      {store.audioStore?.item ? <MiniAudio /> : null}
+    </>
   );
 };
 export default ParentsArea;

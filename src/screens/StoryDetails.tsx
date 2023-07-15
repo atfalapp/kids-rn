@@ -38,7 +38,7 @@ import TrackPlayer, {
   State,
   usePlaybackState,
 } from 'react-native-track-player';
-// import {useStores} from '../store/rootStore';
+import {useStores} from '../store/rootStore';
 // import {useDebouncedValue} from '../hooks/useDebouncedValue';
 import {ActivityIndicator} from 'react-native';
 
@@ -47,6 +47,7 @@ function renderThumb() {
 }
 
 const StoryDetails = ({navigation, route}) => {
+  const store = useStores();
   const {item, fav} = route?.params;
   const state = usePlaybackState();
   const isPlaying = state === State.Playing;
@@ -67,13 +68,6 @@ const StoryDetails = ({navigation, route}) => {
     inProgress: false,
   });
 
-  console.log('====================================');
-  console.log(`currentPosition ${currentPosition}`);
-  console.log('====================================');
-  console.log('====================================');
-  console.log(`currentDuration ${currentDuration}`);
-  console.log('====================================');
-
   const gradientColors = [
     'rgba(42, 46, 49, 0)',
     'rgba(26, 28, 29, 0.8)',
@@ -81,16 +75,26 @@ const StoryDetails = ({navigation, route}) => {
   ];
 
   useEffect(() => {
+    if (route.params.item?.id !== store.audioStore.item.id) {
+      store.audioStore.updateItem(item);
+    }
+  }, [route.params.item]);
+
+  useEffect(() => {
     const setupPlayer = async () => {
       const tracks = await TrackPlayer.getQueue();
       const currentTrack = await TrackPlayer.getCurrentTrack();
-      const track = tracks[currentTrack];
+      const track =
+        currentTrack !== undefined && currentTrack !== null
+          ? tracks[currentTrack]
+          : null;
       if (currentTrack != null && track?.id === item.id) {
         setSoundInfo({
           currentTrack,
-          sound: track.artist,
+          sound: track?.artist ? track?.artist : '',
           inProgress: true,
         });
+
         await TrackPlayer.play();
       } else {
         onPlay();
@@ -128,6 +132,10 @@ const StoryDetails = ({navigation, route}) => {
     }
   };
 
+  console.log('====================================');
+  console.log('store.audioStore.item --->', store.audioStore.item);
+  console.log('====================================');
+
   const onPlay = async () => {
     await TrackPlayer.reset();
     // const {item} = route.params;
@@ -137,9 +145,9 @@ const StoryDetails = ({navigation, route}) => {
       title: item?.name,
       artist: '',
       artwork: item?.image,
-    }).then(async (index: number) => {
+    }).then((index: number | void) => {
       setSoundInfo({
-        currentTrack: index,
+        currentTrack: typeof index === 'number' ? index : -1,
         sound: item.sound,
         inProgress: true,
       });
@@ -166,9 +174,6 @@ const StoryDetails = ({navigation, route}) => {
         <View style={styles.headerLogs}>
           <TouchableOpacity
             onPress={async () => {
-              // soundState?.unloadAsync();
-              // soundState?.stopAsync();
-              await TrackPlayer.reset();
               navigation.goBack();
             }}>
             <CircularIcon

@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {BlurView} from '@react-native-community/blur';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {
   View,
@@ -23,8 +24,11 @@ import ParentsIcon from '../assets/images/iconSvg/Parents-Access.svg';
 
 import {Text} from '../component';
 import axios from 'axios';
+import MiniAudio from '../component/MiniAudio';
+import {useStores} from '../store/rootStore';
 
 const Stories = ({navigation}) => {
+  const store = useStores();
   const gradientColors = [
     'rgb(255, 255, 255)',
     'rgb(255,250,182)',
@@ -43,12 +47,13 @@ const Stories = ({navigation}) => {
     //  , 'rgb(33,74,116)'
   ];
 
-  const [albums, setAlbums] = useState([]);
+  const [albums, setAlbums] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     getAlbumsData();
-  }, []);
+    store.authStore.updateNavigation(navigation);
+  });
 
   const getAlbumsData = async () => {
     setLoading(true);
@@ -66,7 +71,7 @@ const Stories = ({navigation}) => {
   };
 
   return (
-    <View>
+    <>
       <ImageBackground
         resizeMode="stretch"
         style={styles.screenHeader}
@@ -200,7 +205,8 @@ const Stories = ({navigation}) => {
 
         {/* <View style={{ marginVertical: "25%" }} /> */}
       </LinearGradient>
-    </View>
+      {store.audioStore?.item && <MiniAudio bottom={90} />}
+    </>
   );
 };
 export default Stories;

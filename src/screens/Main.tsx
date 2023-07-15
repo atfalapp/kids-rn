@@ -2,7 +2,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import * as Colors from '../styles/Colors';
 import {Platform} from 'react-native';
 

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {throws} from 'assert';
 import {makeAutoObservable} from 'mobx';
 
 type User = {
@@ -21,6 +22,8 @@ type User = {
 class AuthStore {
   authToken!: string | null;
   user!: User | {};
+  navigation: any;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -45,6 +48,10 @@ class AuthStore {
     await AsyncStorage.clear();
     this.authToken = null;
     this.user = {};
+  }
+
+  updateNavigation(value: any) {
+    this.navigation = value;
   }
 }
 

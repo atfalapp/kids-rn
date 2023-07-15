@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {Play} from '../assets/images/iconSvg';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -21,15 +22,18 @@ import stories from '../utils/constants';
 import axios from 'axios';
 import {FavoritesHeaderIcon, BackIcon} from '../assets/images/iconSvg';
 import {Text, CircularIcon} from '../component';
+import MiniAudio from '../component/MiniAudio';
+import {useStores} from '../store/rootStore';
 
 const AlbumStories = ({navigation, route}) => {
+  const store = useStores();
+
   const {item, fav} = route?.params;
 
   const [stories, setStories] = useState([]);
-  // console.log('item', item);
   // console.log("stories", stories);
   const amountInWords = nArabicWords(stories.length, {Feminine: 'on'});
-  useEffect(() => {
+  useFocusEffect(() => {
     axios
       .get(`https://atfal-backend.herokuapp.com/story/${item.id}`)
       .then(res => {
@@ -37,23 +41,38 @@ const AlbumStories = ({navigation, route}) => {
         setStories(res.data);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
   // story.img =
+  console.log('====================================');
+  console.log('store.audioStore?.item albs-->>', store.audioStore?.item);
+  console.log('====================================');
   return (
-    <View
-      style={{
-        height: '100%',
-        flexDirection: 'column',
-        backgroundColor: 'rgb(90, 91, 55)',
-        flex: 1,
-      }}>
-      <ImageBackground
-        style={styles.screenHeader}
-        source={{uri: `${item.cover_image}-header.png`}}>
-        <View style={styles.headerLogs}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+    <>
+      <View
+        style={{
+          height: '100%',
+          flexDirection: 'column',
+          backgroundColor: 'rgb(90, 91, 55)',
+          flex: 1,
+        }}>
+        <ImageBackground
+          style={styles.screenHeader}
+          source={{uri: `${item.cover_image}-header.png`}}>
+          <View style={styles.headerLogs}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <CircularIcon
+                Icon={BackIcon}
+                circleSize={50}
+                borderColor="rgba(255, 255, 255, 0.11)"
+                backgroundColor="rgba(255, 255, 255, 0.11)"
+                style={undefined}
+                blur={undefined}
+                statistics={undefined}
+                minutesNum={undefined}
+              />
+            </TouchableOpacity>
             <CircularIcon
-              Icon={BackIcon}
+              Icon={FavoritesHeaderIcon}
               circleSize={50}
               borderColor="rgba(255, 255, 255, 0.11)"
               backgroundColor="rgba(255, 255, 255, 0.11)"
@@ -62,114 +81,104 @@ const AlbumStories = ({navigation, route}) => {
               statistics={undefined}
               minutesNum={undefined}
             />
-          </TouchableOpacity>
-          <CircularIcon
-            Icon={FavoritesHeaderIcon}
-            circleSize={50}
-            borderColor="rgba(255, 255, 255, 0.11)"
-            backgroundColor="rgba(255, 255, 255, 0.11)"
-            style={undefined}
-            blur={undefined}
-            statistics={undefined}
-            minutesNum={undefined}
-          />
-        </View>
-      </ImageBackground>
-      {/* 
+          </View>
+        </ImageBackground>
+        {/* 
             <LinearGradient start={{ x: 1, y: 0 }} end={{ x: 1, y: 2 }} colors={gradientColors} style={{
                 height: 160,
                 flexDirection: 'column'
             }}> */}
 
-      <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 1, y: 1}}
-        colors={['rgb(90, 91, 55)', 'rgb(90, 91, 55)']}
-        style={{
-          height: 160,
-          opacity: 0.6,
-          marginTop: '-7%',
-          flex: 1,
-        }}>
-        <Text VibesRegular color={['#FFFF']} size={64} style={styles.title}>
-          {item.name}
+        <LinearGradient
+          start={{x: 1, y: 0}}
+          end={{x: 1, y: 1}}
+          colors={['rgb(90, 91, 55)', 'rgb(90, 91, 55)']}
+          style={{
+            height: 160,
+            opacity: 0.6,
+            marginTop: '-7%',
+            flex: 1,
+          }}>
+          <Text VibesRegular color={['#FFFF']} size={64} style={styles.title}>
+            {item.name}
+          </Text>
+        </LinearGradient>
+        {/* </LinearGradient> */}
+        <Text GulfMedium color={['#FFFF']} size={20} style={styles.amount}>
+          {stories.length === 1 ? `${amountInWords} قصص` : 'قصة واحدة'}
         </Text>
-      </LinearGradient>
-      {/* </LinearGradient> */}
-      <Text GulfMedium color={['#FFFF']} size={20} style={styles.amount}>
-        {stories.length === 1 ? `${amountInWords} قصص` : 'قصة واحدة'}
-      </Text>
-      <ScrollView
-        style={[styles.StoriesView, {backgroundColor: 'rgb(90, 91, 55)'}]}
-        contentContainerStyle={{flexGrow: 1}}>
-        <View style={styles.flexOne}>
-          {stories.map(story => (
-            // eslint-disable-next-line react/jsx-key
-            <TouchableOpacity
-              style={[{marginTop: '2%'}, styles.storyContainer]}
-              onPress={() => {
-                // story.name || fav ? navigation.navigate('StoryDetails', { item, sound, fav }) : null
-                story.name || fav
-                  ? navigation.navigate('StoryDetails', {
-                      item: story,
-                      fav: story,
-                    })
-                  : null;
-              }}>
-              <ImageBackground
-                style={styles.storyPlate}
-                source={require('../assets/images/StoryMainPlate.png')}
-                resizeMode="stretch">
-                <TouchableOpacity
-                  style={styles.play}
-                  // onPress={() => story.name || fav ? navigation.navigate('StoryDetails', { item, sound, fav }) : null}>
-                  onPress={() =>
-                    story.name || fav
-                      ? navigation.navigate('StoryDetails', {
-                          item: story,
-                          fav: story,
-                        })
-                      : null
-                  }>
-                  <Play />
-                </TouchableOpacity>
-
+        <ScrollView
+          style={[styles.StoriesView, {backgroundColor: 'rgb(90, 91, 55)'}]}
+          contentContainerStyle={{flexGrow: 1}}>
+          <View style={styles.flexOne}>
+            {stories.map(story => (
+              // eslint-disable-next-line react/jsx-key
+              <TouchableOpacity
+                style={[{marginTop: '2%'}, styles.storyContainer]}
+                onPress={() => {
+                  // story.name || fav ? navigation.navigate('StoryDetails', { item, sound, fav }) : null
+                  story.name || fav
+                    ? navigation.navigate('StoryDetails', {
+                        item: story,
+                        fav: story,
+                      })
+                    : null;
+                }}>
                 <ImageBackground
-                  style={styles.img}
-                  imageStyle={{borderRadius: 30}}
-                  source={
-                    !fav
-                      ? {uri: `${story.image}-small.png`}
-                      : //Will change this later
-                        {uri: ''}
-                  }
-                />
+                  style={styles.storyPlate}
+                  source={require('../assets/images/StoryMainPlate.png')}
+                  resizeMode="stretch">
+                  <TouchableOpacity
+                    style={styles.play}
+                    // onPress={() => story.name || fav ? navigation.navigate('StoryDetails', { item, sound, fav }) : null}>
+                    onPress={() =>
+                      story.name || fav
+                        ? navigation.navigate('StoryDetails', {
+                            item: story,
+                            fav: story,
+                          })
+                        : null
+                    }>
+                    <Play />
+                  </TouchableOpacity>
 
-                <View style={styles.details}>
-                  <View style={{width: '40%'}}>
-                    <Text
-                      GulfSemiBold
-                      size={17}
-                      color="#2f4c63"
-                      style={
-                        story.name && story.name.split(' ').length > 2
-                          ? styles.storyTitle
-                          : null
-                      }>
-                      {story.name ? story.name : story.title}
+                  <ImageBackground
+                    style={styles.img}
+                    imageStyle={{borderRadius: 30}}
+                    source={
+                      !fav
+                        ? {uri: `${story.image}-small.png`}
+                        : //Will change this later
+                          {uri: ''}
+                    }
+                  />
+
+                  <View style={styles.details}>
+                    <View style={{width: '40%'}}>
+                      <Text
+                        GulfSemiBold
+                        size={17}
+                        color="#2f4c63"
+                        style={
+                          story.name && story.name.split(' ').length > 2
+                            ? styles.storyTitle
+                            : null
+                        }>
+                        {story.name ? story.name : story.title}
+                      </Text>
+                    </View>
+                    <Text SFProRoundedMedium size={17} color="#0e9dcb">
+                      {story.time} دقيقة{' '}
                     </Text>
                   </View>
-                  <Text SFProRoundedMedium size={17} color="#0e9dcb">
-                    {story.time} دقيقة{' '}
-                  </Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-      {/* </ImageBackground> */}
-    </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+      {store.audioStore?.item && <MiniAudio />}
+    </>
   );
 };
 
