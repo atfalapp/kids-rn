@@ -75,7 +75,7 @@ const StoryDetails = ({navigation, route}) => {
   ];
 
   useEffect(() => {
-    if (route.params.item?.id !== store.audioStore.item.id) {
+    if (route.params.item?.id !== store.audioStore.item?.id) {
       store.audioStore.updateItem(item);
     }
   }, [route.params.item]);

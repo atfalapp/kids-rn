@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.kidsfairytales"
+    namespace "com.atfalapp"
     defaultConfig {
-        applicationId "com.kidsfairytales"
+        applicationId "com.atfalapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

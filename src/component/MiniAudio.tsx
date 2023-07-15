@@ -50,7 +50,7 @@ const MiniAudio = (props: any) => {
             style={{width: 15, height: 15, marginRight: 20}}
           />
         </TouchableOpacity>
-        <Text style={{color: 'white', marginLeft: 20}}>
+        <Text style={{color: 'white', marginLeft: 30}}>
           {/* {store.audioStore.item?.name} */}
           {store.audioStore.item?.name
             ? store.audioStore.item?.name.includes('\n')
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     bottom: 5,
+    borderRadius: 10,
     width: '95%',
     height: 50,
     shadowColor: '#000',
