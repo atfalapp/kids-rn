@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {Play} from '../assets/images/iconSvg';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -27,25 +27,24 @@ import {useStores} from '../store/rootStore';
 
 const AlbumStories = ({navigation, route}) => {
   const store = useStores();
-
+  const isFocused = useIsFocused();
   const {item, fav} = route?.params;
 
   const [stories, setStories] = useState([]);
   // console.log("stories", stories);
   const amountInWords = nArabicWords(stories.length, {Feminine: 'on'});
-  useFocusEffect(() => {
-    axios
-      .get(`https://atfal-backend.herokuapp.com/story/${item.id}`)
-      .then(res => {
-        console.log('Stories:', res.data);
-        setStories(res.data);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
-  // story.img =
-  console.log('====================================');
-  console.log('store.audioStore?.item albs-->>', store.audioStore?.item);
-  console.log('====================================');
+  useEffect(() => {
+    if (isFocused) {
+      axios
+        .get(`https://atfal-backend.herokuapp.com/story/${item.id}`)
+        .then(res => {
+          console.log('Stories:', res.data);
+          setStories(res.data);
+        });
+      // eslint-disable-next-line react-hooks/exhaustive-deps}
+    }
+  }, [isFocused, item.id]);
+
   return (
     <>
       <View

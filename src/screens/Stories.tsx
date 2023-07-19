@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {BlurView} from '@react-native-community/blur';
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 import {
   View,
@@ -29,6 +30,7 @@ import {useStores} from '../store/rootStore';
 
 const Stories = ({navigation}) => {
   const store = useStores();
+  const isFocused = useIsFocused();
   const gradientColors = [
     'rgb(255, 255, 255)',
     'rgb(255,250,182)',
@@ -50,10 +52,12 @@ const Stories = ({navigation}) => {
   const [albums, setAlbums] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
-  useFocusEffect(() => {
-    getAlbumsData();
-    store.authStore.updateNavigation(navigation);
-  });
+  useEffect(() => {
+    if (isFocused) {
+      getAlbumsData();
+      store.authStore.updateNavigation(navigation);
+    }
+  }, [isFocused]);
 
   const getAlbumsData = async () => {
     setLoading(true);
